@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 
 const SnakeGame = () => {
-  const canvasRef = useRef(null);
+
   const [snake, setSnake] = useState([]);
   const [food, setFood] = useState(null);
   const [engine, setEngine] = useState(null);
+  
   const segmentPositions = useRef([]);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     // Set up Matter.js
@@ -29,7 +31,7 @@ const SnakeGame = () => {
       },
     });
 
-    // Create boundaries
+    // Create world boundaries
     const boundaries = [
       Matter.Bodies.rectangle(canvas.width / 2, 0, canvas.width, 20, { isStatic: true }), // Top boundary
       Matter.Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 20, { isStatic: true }), // Bottom boundary
