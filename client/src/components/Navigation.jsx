@@ -60,14 +60,6 @@ return (
       </Link>
     </li>
 
-    <li className="nav-item">
-      <Link to="/message" className={isActive('/message')}>
-        MESSAGE
-      </Link>
-    </li>
-
-
-
     {/* ---------------------------------- log in conditional function --------------------------------  */}
 
     {showNavigation()}
