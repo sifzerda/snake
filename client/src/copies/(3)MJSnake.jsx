@@ -1,3 +1,7 @@
+
+// snake gains two segments per food eaten
+// food objects are 'isSensor' so they don't cause snake head to bump off course
+
 import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 

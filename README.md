@@ -88,7 +88,6 @@ Tech used:
 - ~~React-Spring~~ this was used but replaced with matter.js
 - ~~React transition group~~ replaced with matter.js
 - Matter.js
-- 
 
 I tried making the game using both matter.js and react-spring.  The game can work in react-spring but lacks the physics dynamic.
 
@@ -96,7 +95,7 @@ Matter.js had an issue where the snake segments had their own physics and collis
 
 1. <u>'useState':</u> useStates track the snake head, food, and matter.js engine;
 2. <u>'const initialSnake':</u> Creates the snake head;
-3. <u>'const foodObject':</u> creates static food objects;
+3. <u>'const foodObject':</u> creates static 'sensor' food objects;
 4. <u>'const handleKeyDown':</u> sets movement controls;
 5. <u>'const updateSegments', 'const updatedDecks'</u> adds segments to snake, spreading existing snake. Segment parts are copies of the head which mirror the head movement;
 6. <u>'const checkCollision':</u> handles collision between snake head and food objects; food is removed and reset to a random position, and a segment is added to the snake head;
