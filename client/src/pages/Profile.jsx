@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_ME, QUERY_CONVERSATIONS } from '../utils/queries';
 import '../App.css';
-import '../minesweeper.css';
+import '../snake.css';
 
 const Profile = () => {
     // Fetch user data

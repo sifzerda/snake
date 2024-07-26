@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSpring, animated } from 'react-spring';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
 
 const SnakeGame = () => {
   const canvasRef = useRef(null);
@@ -21,9 +22,9 @@ const SnakeGame = () => {
         newSnake.pop();
 
         // Check collision with food
-        if (head.x < food.x + 10 &&
+        if (head.x < food.x + 20 &&
             head.x + 20 > food.x &&
-            head.y < food.y + 10 &&
+            head.y < food.y + 20 &&
             head.y + 20 > food.y) {
           setFood({
             x: Math.random() * (canvasRef.current.width - 20),
@@ -70,33 +71,44 @@ const SnakeGame = () => {
     };
   }, []);
 
-  const snakeElements = snake.map((segment, index) => (
-    <animated.div
-      key={index}
-      style={{
-        position: 'absolute',
-        width: 20,
-        height: 20,
-        backgroundColor: 'green',
-        left: segment.x,
-        top: segment.y
-      }}
-    />
-  ));
-
   return (
     <div ref={canvasRef} style={{ position: 'relative', width: 800, height: 600, backgroundColor: 'black' }}>
-      {snakeElements}
-      <animated.div
-        style={{
-          position: 'absolute',
-          width: 20,
-          height: 20,
-          backgroundColor: 'red',
-          left: food.x,
-          top: food.y
-        }}
-      />
+      <TransitionGroup>
+        {snake.map((segment, index) => (
+          <CSSTransition
+            key={index}
+            timeout={100} // Duration of the transition
+            classNames="snake"
+          >
+            <div
+              style={{
+                position: 'absolute',
+                width: 20,
+                height: 20,
+                backgroundColor: 'green',
+                left: segment.x,
+                top: segment.y
+              }}
+            />
+          </CSSTransition>
+        ))}
+        <CSSTransition
+          key={food.x + food.y} // Ensure food re-renders when position changes
+          timeout={100} // Duration of the transition
+          classNames="food"
+        >
+          <div
+            style={{
+              position: 'absolute',
+              width: 20,
+              height: 20,
+              backgroundColor: 'red',
+              left: food.x,
+              top: food.y
+            }}
+          />
+        </CSSTransition>
+      </TransitionGroup>
     </div>
   );
 };

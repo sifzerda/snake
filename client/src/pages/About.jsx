@@ -1,6 +1,6 @@
 import '../App.css';
 import Snake from '../components/Snake';
- 
+ import '../snake.css';
 
 export default function About () {
   return (
