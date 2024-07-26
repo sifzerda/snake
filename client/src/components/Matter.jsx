@@ -6,6 +6,7 @@ const SnakeGame = () => {
   const [snake, setSnake] = useState([]);
   const [food, setFood] = useState(null);
   const [engine, setEngine] = useState(null);
+  const segmentPositions = useRef([]);
 
   useEffect(() => {
     // Set up Matter.js
@@ -24,8 +25,8 @@ const SnakeGame = () => {
       options: {
         width: canvas.width,
         height: canvas.height,
-        wireframes: false
-      }
+        wireframes: false,
+      },
     });
 
     // Create boundaries
@@ -33,7 +34,7 @@ const SnakeGame = () => {
       Matter.Bodies.rectangle(canvas.width / 2, 0, canvas.width, 20, { isStatic: true }), // Top boundary
       Matter.Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 20, { isStatic: true }), // Bottom boundary
       Matter.Bodies.rectangle(0, canvas.height / 2, 20, canvas.height, { isStatic: true }), // Left boundary
-      Matter.Bodies.rectangle(canvas.width, canvas.height / 2, 20, canvas.height, { isStatic: true }) // Right boundary
+      Matter.Bodies.rectangle(canvas.width, canvas.height / 2, 20, canvas.height, { isStatic: true }), // Right boundary
     ];
 
     // Add boundaries to the world
@@ -43,11 +44,14 @@ const SnakeGame = () => {
     const initialSnake = [Matter.Bodies.rectangle(100, 100, 20, 20, {
       frictionAir: 0, // snake will not slow down
       render: {
-        fillStyle: 'green'
-      }
+        fillStyle: 'green',
+      },
     })];
 
     setSnake(initialSnake);
+
+    // Initialize segment positions
+    segmentPositions.current = [{ x: 100, y: 100 }];
 
     // Add the snake to the world
     Matter.World.add(world, initialSnake);
@@ -56,8 +60,8 @@ const SnakeGame = () => {
     const foodObject = Matter.Bodies.circle(300, 300, 10, {
       isStatic: true,
       render: {
-        fillStyle: 'red'
-      }
+        fillStyle: 'red',
+      },
     });
 
     setFood(foodObject);
@@ -115,6 +119,33 @@ const SnakeGame = () => {
   useEffect(() => {
     if (!engine) return;
 
+    const updateSegments = () => {
+      if (snake.length > 1) {
+        // Update segment positions to follow the head
+        const headPosition = { ...snake[0].position };
+        const newSegmentPositions = [headPosition, ...segmentPositions.current.slice(0, snake.length - 1)];
+
+        snake.forEach((segment, index) => {
+          if (index > 0) {
+            const newPosition = newSegmentPositions[index];
+            Matter.Body.setPosition(segment, newPosition);
+          }
+        });
+
+        segmentPositions.current = newSegmentPositions;
+      }
+    };
+
+    Matter.Events.on(engine, 'beforeUpdate', updateSegments);
+
+    return () => {
+      Matter.Events.off(engine, 'beforeUpdate', updateSegments);
+    };
+  }, [engine, snake]);
+
+  useEffect(() => {
+    if (!engine) return;
+
     const checkCollision = Matter.Events.on(engine, 'collisionStart', (event) => {
       const pairs = event.pairs;
       pairs.forEach((pair) => {
@@ -122,19 +153,21 @@ const SnakeGame = () => {
           // Move the food to a new random location
           Matter.Body.setPosition(food, {
             x: Math.random() * 780 + 10,
-            y: Math.random() * 580 + 10
+            y: Math.random() * 580 + 10,
           });
 
           // Add a new segment to the snake
-          const lastSegment = snake[snake.length - 1];
-          const newSegment = Matter.Bodies.rectangle(lastSegment.position.x, lastSegment.position.y, 20, 20, {
+          const lastSegmentPosition = segmentPositions.current[segmentPositions.current.length - 1];
+          const newSegment = Matter.Bodies.rectangle(lastSegmentPosition.x, lastSegmentPosition.y, 20, 20, {
             frictionAir: 0,
+            isSensor: true,
             render: {
-              fillStyle: 'green'
-            }
+              fillStyle: 'green',
+            },
           });
 
           setSnake((prevSnake) => [...prevSnake, newSegment]);
+          segmentPositions.current.push({ ...lastSegmentPosition });
           Matter.World.add(engine.world, newSegment);
         }
       });
