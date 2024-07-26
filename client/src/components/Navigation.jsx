@@ -56,7 +56,13 @@ return (
   <ul className="nav nav-tabs">
     <li className="nav-item">
       <Link to="/" className={isActive('/')}>
-        GAME
+        SPRING
+      </Link>
+    </li>
+
+    <li className="nav-item">
+      <Link to="/matter" className={isActive('/matter')}>
+        MATTER
       </Link>
     </li>
 

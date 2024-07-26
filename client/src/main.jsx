@@ -7,7 +7,7 @@ import App from './App.jsx';
 import Error from './pages/Error.jsx';
 import About from './pages/About.jsx';
 import Profile from './pages/Profile.jsx';
-
+import Matter from './pages/Matter.jsx';
 // subjects
 
 import Login from './pages/Login.jsx';
@@ -38,6 +38,11 @@ const router = createBrowserRouter([
       {
         path: '/Profile',
         element: <Profile />
+      },
+
+      {
+        path: '/Matter',
+        element: <Matter />
       },
 
     ],

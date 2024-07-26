@@ -182,3 +182,35 @@ p.success {
   color: black;
 }
 
+
+/* snake game */
+
+.snake-enter {
+  opacity: 0;
+}
+.snake-enter-active {
+  opacity: 1;
+  transition: opacity 100ms;
+}
+.snake-exit {
+  opacity: 1;
+}
+.snake-exit-active {
+  opacity: 0;
+  transition: opacity 100ms;
+}
+
+.food-enter {
+  opacity: 0;
+}
+.food-enter-active {
+  opacity: 1;
+  transition: opacity 100ms;
+}
+.food-exit {
+  opacity: 1;
+}
+.food-exit-active {
+  opacity: 0;
+  transition: opacity 100ms;
+}

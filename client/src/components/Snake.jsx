@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-
 const SnakeGame = () => {
   const canvasRef = useRef(null);
-  const [snake, setSnake] = useState([{ x: 100, y: 100 }]);
+  const [snake, setSnake] = useState([{ x: 100, y: 100, id: 0 }]);
   const [food, setFood] = useState({ x: 300, y: 300 });
   const [direction, setDirection] = useState({ x: 0, y: 0 });
   const [gameInterval, setGameInterval] = useState(null);
@@ -19,7 +18,6 @@ const SnakeGame = () => {
         head.y += direction.y;
 
         newSnake.unshift(head);
-        newSnake.pop();
 
         // Check collision with food
         if (head.x < food.x + 20 &&
@@ -31,7 +29,10 @@ const SnakeGame = () => {
             y: Math.random() * (canvasRef.current.height - 20)
           });
 
-          newSnake.push({ ...newSnake[newSnake.length - 1] });
+          const newSegment = { ...newSnake[newSnake.length - 1], id: newSnake.length };
+          newSnake.push(newSegment);
+        } else {
+          newSnake.pop();
         }
 
         return newSnake;
@@ -42,7 +43,7 @@ const SnakeGame = () => {
 
     // Clean up on component unmount
     return () => clearInterval(interval);
-  }, [direction]);
+  }, [direction, food]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -74,9 +75,9 @@ const SnakeGame = () => {
   return (
     <div ref={canvasRef} style={{ position: 'relative', width: 800, height: 600, backgroundColor: 'black' }}>
       <TransitionGroup>
-        {snake.map((segment, index) => (
+        {snake.map((segment) => (
           <CSSTransition
-            key={index}
+            key={segment.id}
             timeout={100} // Duration of the transition
             classNames="snake"
           >
