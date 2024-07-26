@@ -446,6 +446,18 @@ ol.nav.nav-tabs {
   list-style: decimal-leading-zero;
 }
 
+
+
+/* src/App.css */
+.App {
+  text-align: center;
+}
+
+canvas {
+  border: 1px solid black;
+}
+
+
 /* ================  ========================== */
  
 .read-the-docs {

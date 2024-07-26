@@ -1,6 +1,6 @@
 import '../App.css';
 import Minesweeper from '../components/Minesweeper';
-import '../minesweeper.css';
+ 
 
 export default function About () {
   return (
