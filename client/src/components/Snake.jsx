@@ -3,22 +3,24 @@ import Matter from 'matter-js';
 
 const SnakeGame = () => {
   const canvasRef = useRef(null);
-  const [snake, setSnake] = useState(null);
+  const [snake, setSnake] = useState([]);
+  const [food, setFood] = useState(null);
+  const [engine, setEngine] = useState(null);
 
   useEffect(() => {
     // Set up Matter.js
-    const engine = Matter.Engine.create();
-    const world = engine.world;
+    const newEngine = Matter.Engine.create();
+    const world = newEngine.world;
 
     // Disable gravity
-    engine.gravity.y = 0;
-    engine.gravity.x = 0;
+    newEngine.gravity.y = 0;
+    newEngine.gravity.x = 0;
 
     // Set up the renderer
     const canvas = canvasRef.current;
     const render = Matter.Render.create({
       canvas: canvas,
-      engine: engine,
+      engine: newEngine,
       options: {
         width: canvas.width,
         height: canvas.height,
@@ -38,21 +40,32 @@ const SnakeGame = () => {
     Matter.World.add(world, boundaries);
 
     // Create a moving snake
-    const initialSnake = Matter.Bodies.rectangle(100, 100, 20, 20, {
+    const initialSnake = [Matter.Bodies.rectangle(100, 100, 20, 20, {
       frictionAir: 0, // snake will not slow down
       render: {
         fillStyle: 'green'
       }
-    });
+    })];
 
     setSnake(initialSnake);
 
     // Add the snake to the world
     Matter.World.add(world, initialSnake);
 
+    // Create food object
+    const foodObject = Matter.Bodies.circle(300, 300, 10, {
+      isStatic: true,
+      render: {
+        fillStyle: 'red'
+      }
+    });
+
+    setFood(foodObject);
+    Matter.World.add(world, foodObject);
+
     // Custom update loop to ensure snake moves
     const update = () => {
-      Matter.Engine.update(engine, 1000 / 60); // Update the engine at 60 FPS
+      Matter.Engine.update(newEngine, 1000 / 60); // Update the engine at 60 FPS
       requestAnimationFrame(update);
     };
 
@@ -60,29 +73,32 @@ const SnakeGame = () => {
     Matter.Render.run(render);
     update(); // Start the custom update loop
 
+    setEngine(newEngine);
+
     // Clean up on component unmount
     return () => {
       Matter.Render.stop(render);
-      Matter.Engine.clear(engine);
+      Matter.Engine.clear(newEngine);
     };
   }, []);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (!snake) return;
+      if (snake.length === 0) return;
 
+      const head = snake[0];
       switch (event.key) {
         case 'ArrowUp':
-          Matter.Body.setVelocity(snake, { x: 0, y: -5 });
+          Matter.Body.setVelocity(head, { x: 0, y: -5 });
           break;
         case 'ArrowDown':
-          Matter.Body.setVelocity(snake, { x: 0, y: 5 });
+          Matter.Body.setVelocity(head, { x: 0, y: 5 });
           break;
         case 'ArrowLeft':
-          Matter.Body.setVelocity(snake, { x: -5, y: 0 });
+          Matter.Body.setVelocity(head, { x: -5, y: 0 });
           break;
         case 'ArrowRight':
-          Matter.Body.setVelocity(snake, { x: 5, y: 0 });
+          Matter.Body.setVelocity(head, { x: 5, y: 0 });
           break;
         default:
           break;
@@ -95,6 +111,39 @@ const SnakeGame = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [snake]);
+
+  useEffect(() => {
+    if (!engine) return;
+
+    const checkCollision = Matter.Events.on(engine, 'collisionStart', (event) => {
+      const pairs = event.pairs;
+      pairs.forEach((pair) => {
+        if ((pair.bodyA === food && snake.includes(pair.bodyB)) || (pair.bodyB === food && snake.includes(pair.bodyA))) {
+          // Move the food to a new random location
+          Matter.Body.setPosition(food, {
+            x: Math.random() * 780 + 10,
+            y: Math.random() * 580 + 10
+          });
+
+          // Add a new segment to the snake
+          const lastSegment = snake[snake.length - 1];
+          const newSegment = Matter.Bodies.rectangle(lastSegment.position.x, lastSegment.position.y, 20, 20, {
+            frictionAir: 0,
+            render: {
+              fillStyle: 'green'
+            }
+          });
+
+          setSnake((prevSnake) => [...prevSnake, newSegment]);
+          Matter.World.add(engine.world, newSegment);
+        }
+      });
+    });
+
+    return () => {
+      Matter.Events.off(engine, 'collisionStart', checkCollision);
+    };
+  }, [engine, snake, food]);
 
   return (
     <div>
