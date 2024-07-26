@@ -39,6 +39,7 @@ const SnakeGame = () => {
 
     // Create a moving snake
     const initialSnake = Matter.Bodies.rectangle(100, 100, 20, 20, {
+      frictionAir: 0, // snake will not slow down
       render: {
         fillStyle: 'green'
       }
