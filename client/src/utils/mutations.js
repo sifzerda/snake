@@ -33,17 +33,32 @@ export const REMOVE_USER = gql`
   }
 `;
 
-export const SAVE_MINE_SCORE = gql`
-  mutation saveMineScore($userId: ID!, $minePoints: Int!, $mineTimeTaken: Int!) {
-    saveMineScore(userId: $userId, minePoints: $minePoints, mineTimeTaken: $mineTimeTaken) {
+export const MUTATION_SEND_MESSAGE = gql`
+  mutation sendMessage($senderId: ID!, $message: String!) {
+    sendMessage(senderId: $senderId, message: $message) {
       _id
-      username
-      email
-      mineScore {
-        minePoints
-        mineTimeTaken
+      sender {
+        _id
+        username
       }
+
+      message
+      timestamp
     }
   }
 `;
 
+export const MUTATION_SAVE_CONVERSATION = gql`
+  mutation saveConversation($messages: [MessageInput!]!) {
+    saveConversation(messages: $messages) {
+      _id
+      sender {
+        _id
+        username
+      }
+
+      message
+      timestamp
+    }
+  }
+`;

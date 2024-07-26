@@ -190,7 +190,7 @@ h1 {
 }
 
 p.black-text {
-  color: black;
+  color: black!important;
 }
 
 .high-scores-table {

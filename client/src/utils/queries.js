@@ -16,10 +16,6 @@ export const QUERY_USERS = gql`
       _id
       username
       email
-      mineScore {
-        minePoints
-        mineTimeTaken
-      }
     }
   }
 `;
@@ -30,21 +26,20 @@ export const QUERY_ME = gql`
       _id
       username
       email
-            mineScore {
-        minePoints
-        mineTimeTaken
+    }
+  }
+`;
+
+export const QUERY_CONVERSATIONS = gql`
+  query getConversations($senderId: ID!) {
+    getConversations(senderId: $senderId) {
+      _id
+      sender {
+        _id
+        username
       }
+      message
+      timestamp
     }
   }
 `;
-
-export const GET_MINE_SCORE = gql`
-  query getMineScore($userId: ID!) {
-    getMineScore(userId: $userId) {
-      minePoints
-      minetimeTaken
-    }
-  }
-`;
-
-

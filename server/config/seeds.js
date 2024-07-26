@@ -13,36 +13,18 @@ db.once('open', async () => {
         email: 'xandro@aol.com',
         password: '12345',
 /* -----------------minesweeper score*/ 
-        mineScore: [
-          {
-            minePoints: 100,
-            mineTimeTaken: 10
-          }
-        ]
       },
 
       {
         username: 'Sal',
         email: 'sal@hotmail.com',
         password: '12345',
-        mineScore: [
-          {
-            minePoints: 90,
-            mineTimeTaken: 12
-          }
-        ]
       },
 
       {
         username: 'Lernantino',
         email: 'lernantino@gmail.com',
         password: '12345',
-        mineScore: [
-          {
-            minePoints: 50,
-            mineTimeTaken: 100
-          }
-        ]
       },
 
       {
@@ -58,7 +40,7 @@ db.once('open', async () => {
     ]);
 
     console.log('🔑 users seeded');
-    console.log('💣 user.minesweeper scores seeded');
+    console.log('...');
 
     process.exit();
   } catch (err) {

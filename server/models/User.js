@@ -20,18 +20,7 @@ const userSchema = new Schema({
     required: true,
     minlength: 5
   },
-  mineScore: [
-    {
-      minePoints: {
-        type: Number,
-        required: true,
-      },
-      mineTimeTaken: {
-        type: Number,
-        required: true,
-      },
-    }
-  ],
+
 });
 
 // set up pre-save middleware to create password

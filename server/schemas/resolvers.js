@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Conversation } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -20,12 +20,8 @@ const resolvers = {
       throw new AuthenticationError('You must be logged in');
     },
 
-    getMineScore: async (parent, { userId }) => {
-      const user = await User.findById(userId);
-      if (!user) {
-        throw new Error('User not found');
-      }
-      return user.mineScore;
+    getConversations: async (_, { senderId }) => {
+      return Conversation.find({ sender: senderId })
     },
 
   },
@@ -73,16 +69,27 @@ const resolvers = {
       return { token, user };
     },
 
-    saveMineScore: async (parent, { userId, minePoints, mineTimeTaken }) => {
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        { $push: { mineScore: { minePoints, mineTimeTaken } } },
-        { new: true }
-      );
-      if (!updatedUser) {
-        throw new Error('User not found');
+    sendMessage: async (_, { senderId,  message }) => {
+      const newConversation = new Conversation({
+        sender: senderId,
+        //recipient: recipientId,
+        message
+      });
+      return newConversation.save();
+    },
+
+    saveConversation: async (_, { messages }) => {
+      const savedConversations = [];
+      for (const msg of messages) {
+        const newConversation = new Conversation({
+          sender: msg.senderId,
+          //recipient: msg.recipientId,
+          message: msg.message,
+          timestamp: new Date().toISOString()
+        });
+        savedConversations.push(await newConversation.save());
       }
-      return updatedUser;
+      return savedConversations;
     },
 
   },

@@ -5,24 +5,30 @@ const typeDefs = `
     username: String
     email: String
     password: String
-    mineScore: [MineScore]
   }
 
-    type MineScore {
-    minePoints: Int
-    mineTimeTaken: Int
-  }
+  type Conversation {
+  _id: ID!
+  sender: User!
+  message: String!
+  timestamp: String!
+}
 
   type Auth {
     token: ID!
     user: User
   }
 
+  input MessageInput {
+  senderId: ID!
+  message: String!
+}
+
   type Query {
     user(userId: ID!): User
     users: [User]
     me: User
-    getMineScore(userId: ID!): [MineScore]
+    getConversations(senderId: ID!): [Conversation]
   }
 
   type Mutation {
@@ -30,8 +36,9 @@ const typeDefs = `
     updateUser(username: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
     removeUser: User
-    saveMineScore(userId: ID!, minePoints: Int!, mineTimeTaken: Int!): User
-  }
+    sendMessage(senderId: ID!, message: String!): Conversation
+    saveConversation(messages: [MessageInput!]!): [Conversation]
+    }
 `;
 
 module.exports = typeDefs;
