@@ -1,5 +1,5 @@
 import '../App.css';
-import Matter from '../components/Matter';
+//import Matter from '../components/Matter';
  import '../snake.css';
 
 export default function About () {
@@ -17,7 +17,7 @@ export default function About () {
 
 <div className='grid-wrapper'>
 <div className='white-box'>
-      <Matter />
+
 </div>
 </div>
 {/* -------------- */}
