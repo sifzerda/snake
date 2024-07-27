@@ -112,7 +112,7 @@ Also had an issue implementing collision between snake head and body; since head
 2. <u>'const initialSnake':</u> Creates the snake head;
 3. <u>'const foodObject':</u> creates static 'sensor' food objects;
 4. <u>'const handleKeyDown':</u> sets movement controls;
-5. <u>'const updateSegments', 'const updatedDecks'</u> adds segments to snake, spreading existing snake. Segment parts are copies of the head which mirror the head movement;
+5. <u>'const updateSegments'</u> adds segments to snake, spreading existing snake. Segment parts are copies of the head which mirror the head movement;
 6. <u>'const checkCollision':</u> handles collision between snake head and food objects; food is removed and reset to a random position, and a segment is added to the snake head;
 7. <u>'const newSegment':</u> segments are 'sensors' so they do not interfere with snake head physics.
 
