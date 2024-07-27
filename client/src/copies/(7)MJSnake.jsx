@@ -1,3 +1,11 @@
+// working snake with matterjs
+// added usehotkeys
+// added a reducer to hold game state
+// changed react reducer to zustand
+// added use sound (commented out) for adding game sound
+// simplified segment adding code
+// simplified and made more precise collision detection code
+
 import { useEffect, useRef } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';

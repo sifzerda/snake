@@ -36,6 +36,7 @@ Lessons learned from building this project:
 
 - Not all moving bodies/objects in matter.js need physics, and there are alternate ways of creating 'non-physics' objects in matter.js.  
 - Using react reducers and zustand
+- Matter.Query and Matter.Bounds instead of a 'collision' fx for more precise collision detection
 
 ## (2) Badges
 
@@ -92,8 +93,10 @@ Parts:
 - useHotkeys: hook for handling movement controls, (not essential)
 -  zustand: handles react reducers to manage game state
 -  useSound: add audio fx
+
 -  
 
+ 
 
  
 
