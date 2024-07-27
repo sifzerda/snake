@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { create } from 'zustand';
@@ -18,6 +18,7 @@ const SnakeGame = () => {
   const { snake, food, engine, setSnake, setFood, setEngine } = useGameStore();
   const segmentPositions = useRef([]);
   const canvasRef = useRef(null);
+  const [gameOver, setGameOver] = useState(false);
 
   //const [playCollisionSound] = useSound('/sounds/collision.mp3');
   //const [playFoodSound] = useSound('/sounds/food.mp3');
@@ -69,8 +70,10 @@ const SnakeGame = () => {
     Matter.World.add(world, foodObject);
 
     const update = () => {
-      Matter.Engine.update(newEngine, 1000 / 60);
-      requestAnimationFrame(update);
+      if (!gameOver) {
+        Matter.Engine.update(newEngine, 1000 / 60);
+        requestAnimationFrame(update);
+      }
     };
 
     Matter.Render.run(render);
@@ -82,7 +85,7 @@ const SnakeGame = () => {
       Matter.Render.stop(render);
       Matter.Engine.clear(newEngine);
     };
-  }, [setSnake, setFood, setEngine]);
+  }, [setSnake, setFood, setEngine, gameOver]);
 
   const handleDirection = (direction) => {
     if (snake.length > 0) {
@@ -160,8 +163,32 @@ const SnakeGame = () => {
     };
   }, [engine, snake, food, setSnake]);
 
+  useEffect(() => {
+    if (!engine) return;
+
+    const checkWallCollision = () => {
+      const head = snake[0];
+      const boundaries = Matter.Composite.allBodies(engine.world).filter(body => body.isStatic);
+
+      for (const boundary of boundaries) {
+        if (Matter.Query.collides(head, [boundary]).length > 0) {
+          setGameOver(true);
+          //playCollisionSound();
+          break;
+        }
+      }
+    };
+
+    Matter.Events.on(engine, 'beforeUpdate', checkWallCollision);
+
+    return () => {
+      Matter.Events.off(engine, 'beforeUpdate', checkWallCollision);
+    };
+  }, [engine, snake]);
+
   return (
     <div>
+      {gameOver && <div className="game-over">Game Over</div>}
       <canvas ref={canvasRef} width={800} height={600} />
     </div>
   );
