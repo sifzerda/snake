@@ -20,6 +20,18 @@ const userSchema = new Schema({
     required: true,
     minlength: 5
   },
+  snakeScore: [
+    {
+      snakePoints: {
+        type: Number,
+        required: true,
+      },
+      snakeTimeTaken: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 
 });
 

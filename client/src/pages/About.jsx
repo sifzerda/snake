@@ -5,13 +5,6 @@ import Snake from '../components/Snake';
 export default function About () {
   return (
     <div>
-       <h1>How to Play</h1> 
-
-      <div className="separator-line"></div>
-
-<p>xxx</p>
-      
-      <div className="separator-line"></div>
 
 {/* game component */}
 

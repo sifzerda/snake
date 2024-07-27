@@ -20,9 +20,6 @@ const resolvers = {
       throw new AuthenticationError('You must be logged in');
     },
 
-    getConversations: async (_, { senderId }) => {
-      return Conversation.find({ sender: senderId })
-    },
 
   },
 
@@ -69,28 +66,9 @@ const resolvers = {
       return { token, user };
     },
 
-    sendMessage: async (_, { senderId,  message }) => {
-      const newConversation = new Conversation({
-        sender: senderId,
-        //recipient: recipientId,
-        message
-      });
-      return newConversation.save();
-    },
 
-    saveConversation: async (_, { messages }) => {
-      const savedConversations = [];
-      for (const msg of messages) {
-        const newConversation = new Conversation({
-          sender: msg.senderId,
-          //recipient: msg.recipientId,
-          message: msg.message,
-          timestamp: new Date().toISOString()
-        });
-        savedConversations.push(await newConversation.save());
-      }
-      return savedConversations;
-    },
+
+
 
   },
 };

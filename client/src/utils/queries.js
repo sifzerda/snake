@@ -16,6 +16,10 @@ export const QUERY_USERS = gql`
       _id
       username
       email
+      snakeScore {
+        snakePoints
+        snakeTimeTaken
+      }
     }
   }
 `;
@@ -26,20 +30,19 @@ export const QUERY_ME = gql`
       _id
       username
       email
+            snakeScore {
+        snakePoints
+        snakeTimeTaken
+      }
     }
   }
 `;
 
-export const QUERY_CONVERSATIONS = gql`
-  query getConversations($senderId: ID!) {
-    getConversations(senderId: $senderId) {
-      _id
-      sender {
-        _id
-        username
-      }
-      message
-      timestamp
+export const GET_SNAKE_SCORE = gql`
+  query getSnakeScore($userId: ID!) {
+    getSnakeScore(userId: $userId) {
+      snakePoints
+      snakeTimeTaken
     }
   }
 `;

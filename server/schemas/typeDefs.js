@@ -5,30 +5,24 @@ const typeDefs = `
     username: String
     email: String
     password: String
+    snakeScore: [SnakeScore]
   }
 
-  type Conversation {
-  _id: ID!
-  sender: User!
-  message: String!
-  timestamp: String!
-}
+    type SnakeScore {
+    snakePoints: Int
+    snakeTimeTaken: Int
+  }
 
   type Auth {
     token: ID!
     user: User
   }
 
-  input MessageInput {
-  senderId: ID!
-  message: String!
-}
-
   type Query {
     user(userId: ID!): User
     users: [User]
     me: User
-    getConversations(senderId: ID!): [Conversation]
+    getSnakeScore(userId: ID!): [SnakeScore]
   }
 
   type Mutation {
@@ -36,8 +30,7 @@ const typeDefs = `
     updateUser(username: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
     removeUser: User
-    sendMessage(senderId: ID!, message: String!): Conversation
-    saveConversation(messages: [MessageInput!]!): [Conversation]
+    saveSnakeScore(userId: ID!, snakePoints: Int!, snakeTimeTaken: Int!): User
     }
 `;
 
