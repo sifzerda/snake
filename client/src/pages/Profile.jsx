@@ -1,25 +1,14 @@
 import { useQuery } from '@apollo/client';
-import { QUERY_ME, QUERY_CONVERSATIONS } from '../utils/queries';
+import { QUERY_ME } from '../utils/queries';
 import '../App.css';
 import '../snake.css';
 
 const Profile = () => {
     // Fetch user data
-    const { loading: userLoading, data: userData, error: userError } = useQuery(QUERY_ME);
+    const { loading, data: userData, error } = useQuery(QUERY_ME);
 
     // Get user information
     const user = userData?.me;
-    const userId = user?._id;
-
-    // Fetch conversations if user is loaded
-    const { loading: conversationsLoading, data: conversationsData, error: conversationsError } = useQuery(QUERY_CONVERSATIONS, {
-        skip: !userId, // Skip query if userId is not available
-        variables: { senderId: userId },
-    });
-
-    if (userLoading || conversationsLoading) return <p>Loading...</p>;
-    if (userError) return <p>Error: {userError.message}</p>;
-    if (conversationsError) return <p>Error: {conversationsError.message}</p>;
 
 //    const mineScores = user?.mineScore || [];
 
@@ -46,18 +35,7 @@ const Profile = () => {
             
             <h2 className='profile-text'>Your Conversations:</h2>
             
-            {conversationsData?.getConversations.length === 0 ? (
-                <p className="black-text">No conversations yet!</p>
-            ) : (
-                <div className="conversations">
-                    {conversationsData.getConversations.map((conv) => (
-                        <div key={conv._id} className="conversation">
-                            <p className="black-text"><strong>{conv.sender.username}</strong>: {conv.message}</p>
-                            <p className="black-text"><em>{new Date(conv.timestamp).toLocaleString()}</em></p>
-                        </div>
-                    ))}
-                </div>
-            )}
+ 
         </div>
     );
 };
