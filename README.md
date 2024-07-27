@@ -118,18 +118,19 @@ Also had an issue implementing collision between snake head and body; since head
 
 ## (8) To do: 
 
-- [ ] create moving snake
-- [ ] create food which randomly resets position once 'eaten'
-- [ ] segments add to snake;
-  - [ ] segments added to snake don't interfere with movement physics;
+- [x] create moving snake
+- [x] create food which randomly resets position once 'eaten'
+- [x] segments add to snake;
+  - [x] segments added to snake don't interfere with movement physics;
 - [ ] add render.sprite to snake head, segments, and food
-- [ ] difficulty ramp: snake moves faster as it gets longer
+- [ ] ~~difficulty ramp: snake moves faster as it gets longer~~
 - [ ] score with food eaten
 - [ ] timer for game session
 - [ ] highscores
 - [ ] main screen
 - [ ] submit score
 - [ ] exit game from game screen
+- [ ] profile highest scores display
 
 ## (10) Support
 
