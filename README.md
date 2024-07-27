@@ -35,6 +35,7 @@ It started with a moving snake, configuring snake movement/physics, and then add
 Lessons learned from building this project:
 
 - Not all moving bodies/objects in matter.js need physics, and there are alternate ways of creating 'non-physics' objects in matter.js.  
+- Using react reducers and zustand
 
 ## (2) Badges
 
@@ -89,8 +90,17 @@ Parts:
 - ~~React transition group~~ replaced with matter.js
 - Matter.js
 - useHotkeys: hook for handling movement controls, (not essential)
+-  zustand: handles react reducers to manage game state
+-  useSound: add audio fx
+-  
 
-I tried making the game using both matter.js and react-spring.  The game can work in react-spring but lacks the physics dynamic.
+
+ 
+
+
+
+
+I initially tried making the game using both matter.js and react-spring.  The game can work in react-spring but lacks the physics dynamic and seamless animation.
 
 Matter.js had an issue where the snake segments had their own physics and collision with the snake head, which caused erratic movement with more segments. UseState had to track the head and copy/spread the snake head so segments mirrored the head and did not move independently.
 

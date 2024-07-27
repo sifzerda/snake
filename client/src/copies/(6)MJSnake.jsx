@@ -1,3 +1,9 @@
+// working snake with matterjs
+// added usehotkeys
+// added a reducer to hold game state
+// changed react reducer to zustand
+// added use sound (commented out) for adding game sound
+
 import { useEffect, useRef } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -21,6 +27,7 @@ const SnakeGame = () => {
 
   //const [playCollisionSound] = useSound('/sounds/collision.mp3');
   //const [playFoodSound] = useSound('/sounds/food.mp3');
+
 
   useEffect(() => {
     const newEngine = Matter.Engine.create();
@@ -141,16 +148,23 @@ const SnakeGame = () => {
             y: Math.random() * 580 + 10,
           });
 
-          const lastSegmentPosition = segmentPositions.current[segmentPositions.current.length - 1];
-          const newSegment = Matter.Bodies.rectangle(lastSegmentPosition.x, lastSegmentPosition.y, 20, 20, {
+          const lastSegmentPosition1 = segmentPositions.current[segmentPositions.current.length - 1];
+          const newSegment1 = Matter.Bodies.rectangle(lastSegmentPosition1.x, lastSegmentPosition1.y, 20, 20, {
             frictionAir: 0,
             isSensor: true,
             render: { fillStyle: 'green' },
           });
 
-          setSnake([...snake, newSegment]);
-          segmentPositions.current.push({ ...lastSegmentPosition });
-          Matter.World.add(engine.world, newSegment);
+          const lastSegmentPosition2 = { ...lastSegmentPosition1 };
+          const newSegment2 = Matter.Bodies.rectangle(lastSegmentPosition2.x, lastSegmentPosition2.y, 20, 20, {
+            frictionAir: 0,
+            isSensor: true,
+            render: { fillStyle: 'green' },
+          });
+
+          setSnake([...snake, newSegment1, newSegment2]);
+          segmentPositions.current.push({ ...lastSegmentPosition1 }, { ...lastSegmentPosition2 });
+          Matter.World.add(engine.world, [newSegment1, newSegment2]);
         }
       });
     });
