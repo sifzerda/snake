@@ -27,10 +27,9 @@ Current games in gamestack:
 
 ## (1) Description
 
-Part of my personal project to create a react MERN stack app which has a number of simple games. I used trial and error and ChatGPT prompting. 
+Part of my personal project to create a react MERN stack app which has a number of basic games. I used trial and error and ChatGPT prompting. 
 
-As this is a fairly simple game, it didn't need to be broken up into multiple build stages as the previous games. 
-It started with a moving snake, configuring snake movement/physics, and then adding snake growth dynamic.
+As this is a fairly simple game, it didn't need to be broken up into multiple build stages as the previous games. It started with a moving snake, configuring snake movement/physics, and then adding snake growth dynamic.
  
 Lessons learned from building this project:
 
@@ -94,19 +93,11 @@ Parts:
 -  zustand: handles react reducers to manage game state
 -  useSound: add audio fx
 
--  
+Early version of game made using react-spring, but this played out frame-by-frame and lacked the physics and animation dynamics. 
 
- 
+Matter.js had an issue where the snake segments had their own physics and collision with the snake head, which caused erratic movement with more segments. Changed this so UseState tracks the head and copy/spread the snake head so segments mirrored the head and did not operate independent of the head.
 
- 
-
-
-
-
-I initially tried making the game using both matter.js and react-spring.  The game can work in react-spring but lacks the physics dynamic and seamless animation.
-
-Matter.js had an issue where the snake segments had their own physics and collision with the snake head, which caused erratic movement with more segments. UseState had to track the head and copy/spread the snake head so segments mirrored the head and did not move independently.
-Also had an issue implementing collision between snake head and body; since head is always touching body this constantly triggered game over for snake running into itself. Have to make collision detectors in snake separate and smaller - inside snake segments - same as I did with pocket detectors in 8 ball pool.
+Also had an issue implementing collision between snake head and body; since head is always touching body this constantly triggered game over for snake running into itself. I tried making tiny detection objects inside the head and segments but this created issues. Had to limit collision to head-to-segment, not segment-to-segment, and exclude the first 10 segments (since physically impossible for snake head to touch those anyway).
 
 1. <u>'useState':</u> useStates track the snake head, food, and matter.js engine;
 2. <u>'const initialSnake':</u> Creates the snake head;
@@ -115,6 +106,10 @@ Also had an issue implementing collision between snake head and body; since head
 5. <u>'const updateSegments'</u> adds segments to snake, spreading existing snake. Segment parts are copies of the head which mirror the head movement;
 6. <u>'const checkCollision':</u> handles collision between snake head and food objects; food is removed and reset to a random position, and a segment is added to the snake head;
 7. <u>'const newSegment':</u> segments are 'sensors' so they do not interfere with snake head physics.
+8. <u>'const useGameStore':</u> game state reducer managed by zustand.
+9. <u>'const boundaries':</u> creates insivible walls around game screen border.
+10. <u>'const checkFoodCollision', 'checkWallCollision', 'checkSegmentCollision':</u> handles collision between snake head and food objects, and between snake head and wall boundaries, and between snake head and new segments (excluding first 10 segments).
+11.  
 
 ## (7) Bugs: 
 

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { create } from 'zustand';
-//import useSound from 'use-sound';
+// import useSound from 'use-sound';
 
 // Creates Zustand store
 const useGameStore = create((set) => ({
@@ -20,8 +20,8 @@ const SnakeGame = () => {
   const canvasRef = useRef(null);
   const [gameOver, setGameOver] = useState(false);
 
-  //const [playCollisionSound] = useSound('/sounds/collision.mp3');
-  //const [playFoodSound] = useSound('/sounds/food.mp3');
+  // const [playCollisionSound] = useSound('/sounds/collision.mp3');
+  // const [playFoodSound] = useSound('/sounds/food.mp3');
 
   useEffect(() => {
     const newEngine = Matter.Engine.create();
@@ -121,6 +121,7 @@ const SnakeGame = () => {
         });
 
         segmentPositions.current = newSegmentPositions;
+        //console.log('Number of current snake segments:', snake.length);
       }
     };
 
@@ -134,11 +135,11 @@ const SnakeGame = () => {
   useEffect(() => {
     if (!engine) return;
 
-    // collision between snake head and food:
-    const checkCollision = () => {
+    // Collision between snake head and food
+    const checkFoodCollision = () => {
       const head = snake[0];
       if (Matter.Query.collides(head, [food]).length > 0) {
-        //playFoodSound();
+        // playFoodSound();
         Matter.Body.setPosition(food, {
           x: Math.random() * 780 + 10,
           y: Math.random() * 580 + 10,
@@ -157,17 +158,17 @@ const SnakeGame = () => {
       }
     };
 
-    Matter.Events.on(engine, 'beforeUpdate', checkCollision);
+    Matter.Events.on(engine, 'beforeUpdate', checkFoodCollision);
 
     return () => {
-      Matter.Events.off(engine, 'beforeUpdate', checkCollision);
+      Matter.Events.off(engine, 'beforeUpdate', checkFoodCollision);
     };
   }, [engine, snake, food, setSnake]);
 
   useEffect(() => {
     if (!engine) return;
 
-    // collision between snake head and wall:
+    // Collision between snake head and wall
     const checkWallCollision = () => {
       const head = snake[0];
       const boundaries = Matter.Composite.allBodies(engine.world).filter(body => body.isStatic);
@@ -175,7 +176,7 @@ const SnakeGame = () => {
       for (const boundary of boundaries) {
         if (Matter.Query.collides(head, [boundary]).length > 0) {
           setGameOver(true);
-          //playCollisionSound();
+          // playCollisionSound();
           break;
         }
       }
@@ -185,6 +186,28 @@ const SnakeGame = () => {
 
     return () => {
       Matter.Events.off(engine, 'beforeUpdate', checkWallCollision);
+    };
+  }, [engine, snake]);
+
+  useEffect(() => {
+    if (!engine) return;
+
+    // Collision between snake head and its segments
+    const checkSegmentCollision = () => {
+      const head = snake[0];
+      for (let i = 10; i < snake.length; i++) {
+        if (Matter.Query.collides(head, [snake[i]]).length > 0) {
+          setGameOver(true);
+          // playCollisionSound();
+          break;
+        }
+      }
+    };
+
+    Matter.Events.on(engine, 'beforeUpdate', checkSegmentCollision);
+
+    return () => {
+      Matter.Events.off(engine, 'beforeUpdate', checkSegmentCollision);
     };
   }, [engine, snake]);
 
