@@ -1,3 +1,9 @@
+// working snake with matterjs
+// added usehotkeys
+// added a reducer to hold game state
+// added use sound (commented out) for adding game sound
+
+
 import { useEffect, useRef, useReducer } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -28,7 +34,7 @@ const SnakeGame = () => {
   const canvasRef = useRef(null);
 
   //const [playCollisionSound] = useSound('/sounds/collision.mp3');
-  const [playFoodSound] = useSound('/sounds/food.mp3');
+  //const [playFoodSound] = useSound('/sounds/food.mp3');
 
   useEffect(() => {
     const newEngine = Matter.Engine.create();
@@ -143,7 +149,7 @@ const SnakeGame = () => {
       const pairs = event.pairs;
       pairs.forEach((pair) => {
         if ((pair.bodyA === state.food && state.snake.includes(pair.bodyB)) || (pair.bodyB === state.food && state.snake.includes(pair.bodyA))) {
-          playFoodSound();
+          //playFoodSound();
           Matter.Body.setPosition(state.food, {
             x: Math.random() * 780 + 10,
             y: Math.random() * 580 + 10,
