@@ -9,6 +9,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Permanent+Marker&family=Rubik+Mono+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poiret+One&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Raleway+Dots&display=swap');
 
 :root {
   --blue: #2684ff;
@@ -27,6 +28,7 @@
   --creepy-green: #9cffd9;
   --creepy-green2:  #cefff4;
   --midnight: rgb(8, 29, 88);
+  --reptile: #00ff00;
 }
 
 * {
@@ -138,21 +140,21 @@ a.back-link {
   margin-top: 5px;  
 }
 
-.submit-button-z:hover {
-  background-color: #ffffff;
-  border: 2px solid var(--blue);
-  color: var(--blue);
-}
-
 .submit-button-z {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: var(--midnight);
-  color: #fff;
-  border: 2px solid var(--blue);
+  background-color: black;
+  color:  var(--reptile);
+  border: 2px solid var(--reptile);                                   
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.5s;
+}
+
+.submit-button-z:hover {
+  background-color:  var(--blue);
+  border: 2px solid var(--reptile);
+  color: var(--reptile);
 }
 
 .button-container-z {
@@ -192,7 +194,7 @@ h2.login-title {
   text-align: center;
   margin-bottom: 20px;
   margin-top: 20px;
-  color: var(--volt);
+  color: var(--reptile);
 }
 
 div.container.my-1-9 {
@@ -243,13 +245,13 @@ header.header {
   width: 100%;
   display: flex;
   flex-direction: column;
-  border-right: var(--dark-blue) ridge 8px;
+  border-right: var(--midnight) dashed 4px;
   align-items: center;
   padding: 0;
 }
 
 footer {
-  border-top: var(--dark-blue) ridge 8px;
+  border-top: var(--midnight) dashed 4px;
   margin-top: auto;
   background: black;
   padding: 16px;
@@ -262,17 +264,17 @@ a {
 
 /* svg icons on contact page*/
 a:hover {
-  color: var(--volt)!important;
+  color: var(--reptile)!important;
 }
 
 /* ------ -------------------- ----------- */
 
 div.bucket-app {
-  border-top: var(--dark-blue) ridge 8px;
+  border-top: var(--midnight) dashed 4px;
 }
 
 aside.sidebar {
-  border-right: var(--dark-blue) ridge 8px;
+  border-right: var(--midnight) dashed 4px;
 }
 
 .nav-tabs-subjects {
@@ -300,8 +302,8 @@ aside.sidebar {
 
 .nav-link.active {
   background-color: black !important;
-  color: var(--volt) !important;
-  border: 2px solid var(--volt) !important;
+  color: var(--reptile) !important;
+  border: 2px solid var(--reptile) !important;
   font-style: italic;
 }
 
@@ -317,32 +319,17 @@ li.nav-item {
 }
 
 h1 {
-  font-size: 40px !important;
+  font-size: 25px;
   margin: auto 0;
   justify-content: center;
-  display: grid;
-  font-family: "Rajdhani", cursive;
-  color:  var(--volt);
-  text-shadow: 5px 8px 5px rgba(0, 0, 0, 0.5);
-}
-
-span.bomb {
-  color: var(--light-red);
-border: 3px solid white;
-  padding: 10px;
-  font-size: 25px;
+  text-align: center;
+  font-family: "Bungee", cursive;
+  color:  var(--reptile);
 }
 
 span.flag {
   color: var(--light-red);
   font-size: 20px;
-}
-
-.separator-line {
-  width: 100%;
-  height: 1px;
-  background-color: #fff; 
-  margin: 20px 0; 
 }
 
 /* projects ---------------------------------------------------------*/
@@ -362,13 +349,8 @@ a {
   font-family: 'Source Code Pro';
 }
 
-
 h4 {
   color: var(--light-red);
-}
-
-h2 {
-  color: var(--creepy-green);
 }
 
 p.mb-0-1 {
@@ -388,12 +370,6 @@ h5 {
   background-color: black!important;
 }
 
-p.code-left {
-  margin-left: 20px;
-  margin-right: 20px;
-  text-indent: 20px;
-}
-
 .bg-light {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
@@ -404,12 +380,6 @@ p.code-left {
   align-items: center;
   font-size: 24px;
   cursor: pointer;
-}
-
-.delete-icon,
-.edit-icon {
-  margin-right: 5px;
-  color: #fff;
 }
 
 /* ================== Contact Form ======================== */
@@ -446,8 +416,6 @@ ol.nav.nav-tabs {
   list-style: decimal-leading-zero;
 }
 
-
-
 /* src/App.css */
 .App {
   text-align: center;
@@ -457,30 +425,7 @@ canvas {
   border: 1px solid black;
 }
 
-
-/* ================  ========================== */
- 
-.read-the-docs {
-  color: #888;
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* ========================= media queries ======================== */
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
 
 /* media query for contact flex-box icons*/
 @media screen and (max-width: 600px) {
@@ -520,10 +465,6 @@ canvas {
 
   h3 {
     font-size: 16px;
-  }
-
-  p.separator {
-    margin-bottom: 20px;
   }
 
   p {
@@ -575,15 +516,6 @@ canvas {
   div.icon-container {
     justify-content: center;
     margin-right: 20px;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .sidebar {
-      width: 180px; /* Narrowed width when window is minimized */
-  }
-  .aside.sidebar {
-width: 180px;
   }
 }
  

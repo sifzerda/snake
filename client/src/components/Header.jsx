@@ -4,9 +4,7 @@ function Header() {
     <header className='header'>
       <header className='header-gold'>
  
- <h1>Snake <span className='bomb'>🐍</span></h1>
-
- <p>......</p>
+ <h1> Snake 🐍</h1>
  
       </header>
     </header>

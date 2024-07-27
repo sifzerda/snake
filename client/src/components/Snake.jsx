@@ -52,7 +52,7 @@ const SnakeGame = () => {
 
     const initialSnake = [Matter.Bodies.rectangle(100, 100, 20, 20, {
       frictionAir: 0,
-      render: { fillStyle: 'green' },
+      render: { fillStyle: '#00ff00' },
     })];
 
     setSnake(initialSnake);
@@ -63,7 +63,7 @@ const SnakeGame = () => {
     const foodObject = Matter.Bodies.circle(300, 300, 10, {
       isStatic: true,
       isSensor: true,
-      render: { fillStyle: 'red' },
+      render: { fillStyle: '#f02652' },
     });
 
     setFood(foodObject);
@@ -149,7 +149,7 @@ const SnakeGame = () => {
         const newSegment = Matter.Bodies.rectangle(lastSegmentPosition.x, lastSegmentPosition.y, 20, 20, {
           frictionAir: 0,
           isSensor: true,
-          render: { fillStyle: 'green' },
+          render: { fillStyle: '#00ff00' },
         });
 
         setSnake([...snake, newSegment]);
