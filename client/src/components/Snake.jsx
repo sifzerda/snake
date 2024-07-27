@@ -215,7 +215,7 @@ const SnakeGame = () => {
   return (
     <div>
       {gameOver && <div className="game-over">Game Over</div>}
-      <canvas ref={canvasRef} width={1000} height={800} />
+      <canvas ref={canvasRef} width={800} height={600} />
     </div>
   );
 };
