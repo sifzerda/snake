@@ -1,8 +1,12 @@
+// added apple emoji for food object
+
 import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { create } from 'zustand';
+// import useSound from 'use-sound';
 
+// Creates Zustand store
 const useGameStore = create((set) => ({
   snake: [],
   food: null,
@@ -17,8 +21,9 @@ const SnakeGame = () => {
   const segmentPositions = useRef([]);
   const canvasRef = useRef(null);
   const [gameOver, setGameOver] = useState(false);
-  const [time, setTime] = useState(0); // Timer state
-  const [timerStarted, setTimerStarted] = useState(false); // Timer start state
+
+  // const [playCollisionSound] = useSound('/sounds/collision.mp3');
+  // const [playFoodSound] = useSound('/sounds/food.mp3');
 
   useEffect(() => {
     const newEngine = Matter.Engine.create();
@@ -57,16 +62,18 @@ const SnakeGame = () => {
     segmentPositions.current = [{ x: 100, y: 100 }];
     Matter.World.add(world, initialSnake);
 
+    // Create canvas for food emoji
     const emojiCanvas = document.createElement('canvas');
     const emojiContext = emojiCanvas.getContext('2d');
-    emojiCanvas.width = 30;
+    emojiCanvas.width = 30; // Size of your emoji
     emojiCanvas.height = 30;
-    emojiContext.font = '20px sans-serif';
+    emojiContext.font = '20px sans-serif'; // Font size should match the emoji size
     emojiContext.fillText('🍏', 0, 20);
 
-    emojiContext.globalCompositeOperation = 'source-atop';
-    emojiContext.fillStyle = '#f02652';
-    emojiContext.fillRect(0, 0, emojiCanvas.width, emojiCanvas.height);
+// Apply red tint to emoji
+emojiContext.globalCompositeOperation = 'source-atop'; // Ensure tint only affects the emoji
+emojiContext.fillStyle = '#f02652';
+emojiContext.fillRect(0, 0, emojiCanvas.width, emojiCanvas.height);
 
     const foodObject = Matter.Bodies.circle(300, 300, 10, {
       isStatic: true,
@@ -74,8 +81,8 @@ const SnakeGame = () => {
       render: {
         sprite: {
           texture: emojiCanvas.toDataURL(),
-          xScale: 1.3,
-          yScale: 1.3,
+          xScale: 1.3, // Scale factor for width
+          yScale: 1.3, // Scale factor for height
         },
       },
     });
@@ -101,16 +108,6 @@ const SnakeGame = () => {
     };
   }, [setSnake, setFood, setEngine, gameOver]);
 
-  useEffect(() => {
-    if (gameOver || !timerStarted) return;
-
-    const timerInterval = setInterval(() => {
-      setTime((prevTime) => prevTime + 1);
-    }, 1000);
-
-    return () => clearInterval(timerInterval);
-  }, [gameOver, timerStarted]);
-
   const handleDirection = (direction) => {
     if (snake.length > 0) {
       const head = snake[0];
@@ -121,11 +118,6 @@ const SnakeGame = () => {
         right: { x: 5, y: 0 },
       };
       Matter.Body.setVelocity(head, velocityMap[direction]);
-
-      // Start the timer on the first move
-      if (!timerStarted) {
-        setTimerStarted(true);
-      }
     }
   };
 
@@ -150,6 +142,7 @@ const SnakeGame = () => {
         });
 
         segmentPositions.current = newSegmentPositions;
+        //console.log('Number of current snake segments:', snake.length);
       }
     };
 
@@ -163,9 +156,11 @@ const SnakeGame = () => {
   useEffect(() => {
     if (!engine) return;
 
+    // Collision between snake head and food
     const checkFoodCollision = () => {
       const head = snake[0];
       if (Matter.Query.collides(head, [food]).length > 0) {
+        // playFoodSound();
         Matter.Body.setPosition(food, {
           x: Math.random() * 780 + 10,
           y: Math.random() * 580 + 10,
@@ -194,6 +189,7 @@ const SnakeGame = () => {
   useEffect(() => {
     if (!engine) return;
 
+    // Collision between snake head and wall
     const checkWallCollision = () => {
       const head = snake[0];
       const boundaries = Matter.Composite.allBodies(engine.world).filter(body => body.isStatic);
@@ -201,6 +197,7 @@ const SnakeGame = () => {
       for (const boundary of boundaries) {
         if (Matter.Query.collides(head, [boundary]).length > 0) {
           setGameOver(true);
+          // playCollisionSound();
           break;
         }
       }
@@ -216,11 +213,13 @@ const SnakeGame = () => {
   useEffect(() => {
     if (!engine) return;
 
+    // Collision between snake head and its segments
     const checkSegmentCollision = () => {
       const head = snake[0];
       for (let i = 10; i < snake.length; i++) {
         if (Matter.Query.collides(head, [snake[i]]).length > 0) {
           setGameOver(true);
+          // playCollisionSound();
           break;
         }
       }
@@ -233,10 +232,10 @@ const SnakeGame = () => {
     };
   }, [engine, snake]);
 
+  // ---------------------------- rendering ---------------------------------//
   return (
     <div>
       {gameOver && <div className="game-over">Game Over</div>}
-      <div className="timer">Time: {Math.floor(time / 60)}:{('0' + (time % 60)).slice(-2)}</div>
       <canvas ref={canvasRef} width={800} height={600} />
     </div>
   );
