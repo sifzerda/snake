@@ -4,9 +4,9 @@ function Header() {
     <header className='header'>
       <header className='header-gold'>
  
- <h1>Minesweeper <span className='bomb'>💣</span></h1>
+ <h1>Snake <span className='bomb'>🐍</span></h1>
 
- <p>Explodere est pars facilis</p>
+ <p>......</p>
  
       </header>
     </header>
