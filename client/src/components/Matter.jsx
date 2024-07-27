@@ -1,34 +1,27 @@
-import { useEffect, useRef, useReducer } from 'react';
+import { useEffect, useRef } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { create } from 'zustand';
 //import useSound from 'use-sound';
 
-const initialState = {
+// Creates Zustand store
+const useGameStore = create((set) => ({
   snake: [],
   food: null,
   engine: null,
-};
-
-function gameReducer(state, action) {
-  switch (action.type) {
-    case 'SET_SNAKE':
-      return { ...state, snake: action.payload };
-    case 'SET_FOOD':
-      return { ...state, food: action.payload };
-    case 'SET_ENGINE':
-      return { ...state, engine: action.payload };
-    default:
-      return state;
-  }
-}
+  setSnake: (snake) => set({ snake }),
+  setFood: (food) => set({ food }),
+  setEngine: (engine) => set({ engine }),
+}));
 
 const SnakeGame = () => {
-  const [state, dispatch] = useReducer(gameReducer, initialState);
+  const { snake, food, engine, setSnake, setFood, setEngine } = useGameStore();
   const segmentPositions = useRef([]);
   const canvasRef = useRef(null);
 
-  //const [playCollisionSound] = useSound('/sounds/collision.mp3');
-  const [playFoodSound] = useSound('/sounds/food.mp3');
+    //const [playCollisionSound] = useSound('/sounds/collision.mp3');
+  //const [playFoodSound] = useSound('/sounds/food.mp3');
+
 
   useEffect(() => {
     const newEngine = Matter.Engine.create();
@@ -62,7 +55,7 @@ const SnakeGame = () => {
       render: { fillStyle: 'green' },
     })];
 
-    dispatch({ type: 'SET_SNAKE', payload: initialSnake });
+    setSnake(initialSnake);
 
     segmentPositions.current = [{ x: 100, y: 100 }];
     Matter.World.add(world, initialSnake);
@@ -73,7 +66,7 @@ const SnakeGame = () => {
       render: { fillStyle: 'red' },
     });
 
-    dispatch({ type: 'SET_FOOD', payload: foodObject });
+    setFood(foodObject);
     Matter.World.add(world, foodObject);
 
     const update = () => {
@@ -84,17 +77,17 @@ const SnakeGame = () => {
     Matter.Render.run(render);
     update();
 
-    dispatch({ type: 'SET_ENGINE', payload: newEngine });
+    setEngine(newEngine);
 
     return () => {
       Matter.Render.stop(render);
       Matter.Engine.clear(newEngine);
     };
-  }, []);
+  }, [setSnake, setFood, setEngine]);
 
   const handleDirection = (direction) => {
-    if (state.snake.length > 0) {
-      const head = state.snake[0];
+    if (snake.length > 0) {
+      const head = snake[0];
       const velocityMap = {
         up: { x: 0, y: -5 },
         down: { x: 0, y: 5 },
@@ -105,20 +98,20 @@ const SnakeGame = () => {
     }
   };
 
-  useHotkeys('arrowup', () => handleDirection('up'), [state.snake]);
-  useHotkeys('arrowdown', () => handleDirection('down'), [state.snake]);
-  useHotkeys('arrowleft', () => handleDirection('left'), [state.snake]);
-  useHotkeys('arrowright', () => handleDirection('right'), [state.snake]);
+  useHotkeys('arrowup', () => handleDirection('up'), [snake]);
+  useHotkeys('arrowdown', () => handleDirection('down'), [snake]);
+  useHotkeys('arrowleft', () => handleDirection('left'), [snake]);
+  useHotkeys('arrowright', () => handleDirection('right'), [snake]);
 
   useEffect(() => {
-    if (!state.engine) return;
+    if (!engine) return;
 
     const updateSegments = () => {
-      if (state.snake.length > 1) {
-        const headPosition = { ...state.snake[0].position };
-        const newSegmentPositions = [headPosition, ...segmentPositions.current.slice(0, state.snake.length - 1)];
+      if (snake.length > 1) {
+        const headPosition = { ...snake[0].position };
+        const newSegmentPositions = [headPosition, ...segmentPositions.current.slice(0, snake.length - 1)];
 
-        state.snake.forEach((segment, index) => {
+        snake.forEach((segment, index) => {
           if (index > 0) {
             const newPosition = newSegmentPositions[index];
             Matter.Body.setPosition(segment, newPosition);
@@ -129,22 +122,22 @@ const SnakeGame = () => {
       }
     };
 
-    Matter.Events.on(state.engine, 'beforeUpdate', updateSegments);
+    Matter.Events.on(engine, 'beforeUpdate', updateSegments);
 
     return () => {
-      Matter.Events.off(state.engine, 'beforeUpdate', updateSegments);
+      Matter.Events.off(engine, 'beforeUpdate', updateSegments);
     };
-  }, [state.engine, state.snake]);
+  }, [engine, snake]);
 
   useEffect(() => {
-    if (!state.engine) return;
+    if (!engine) return;
 
-    const checkCollision = Matter.Events.on(state.engine, 'collisionStart', (event) => {
+    const checkCollision = Matter.Events.on(engine, 'collisionStart', (event) => {
       const pairs = event.pairs;
       pairs.forEach((pair) => {
-        if ((pair.bodyA === state.food && state.snake.includes(pair.bodyB)) || (pair.bodyB === state.food && state.snake.includes(pair.bodyA))) {
-          playFoodSound();
-          Matter.Body.setPosition(state.food, {
+        if ((pair.bodyA === food && snake.includes(pair.bodyB)) || (pair.bodyB === food && snake.includes(pair.bodyA))) {
+          //playFoodSound();
+          Matter.Body.setPosition(food, {
             x: Math.random() * 780 + 10,
             y: Math.random() * 580 + 10,
           });
@@ -163,17 +156,17 @@ const SnakeGame = () => {
             render: { fillStyle: 'green' },
           });
 
-          dispatch({ type: 'SET_SNAKE', payload: [...state.snake, newSegment1, newSegment2] });
+          setSnake([...snake, newSegment1, newSegment2]);
           segmentPositions.current.push({ ...lastSegmentPosition1 }, { ...lastSegmentPosition2 });
-          Matter.World.add(state.engine.world, [newSegment1, newSegment2]);
+          Matter.World.add(engine.world, [newSegment1, newSegment2]);
         }
       });
     });
 
     return () => {
-      Matter.Events.off(state.engine, 'collisionStart', checkCollision);
+      Matter.Events.off(engine, 'collisionStart', checkCollision);
     };
-  }, [state.engine, state.snake, state.food]);
+  }, [engine, snake, food, setSnake]);
 
   return (
     <div>
