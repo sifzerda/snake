@@ -84,10 +84,11 @@ Parts:
 
 ## (6) Dev Stuff: Building:
 
-Tech used:
+### Tech used:
 - ~~React-Spring~~ this was used but replaced with matter.js
 - ~~React transition group~~ replaced with matter.js
 - Matter.js
+- useHotkeys: hook for handling movement controls, (not essential)
 
 I tried making the game using both matter.js and react-spring.  The game can work in react-spring but lacks the physics dynamic.
 

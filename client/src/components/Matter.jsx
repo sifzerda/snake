@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const SnakeGame = () => {
   const [snake, setSnake] = useState([]);
@@ -59,7 +60,7 @@ const SnakeGame = () => {
 
     // Create food object
     const foodObject = Matter.Bodies.circle(300, 300, 10, {
-      isStatic: true,            
+      isStatic: true,
       isSensor: true,
       render: {
         fillStyle: 'red',
@@ -88,34 +89,26 @@ const SnakeGame = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (snake.length === 0) return;
-
-      const head = snake[0];
-      switch (event.key) {
-        case 'ArrowUp':
-          Matter.Body.setVelocity(head, { x: 0, y: -5 });
-          break;
-        case 'ArrowDown':
-          Matter.Body.setVelocity(head, { x: 0, y: 5 });
-          break;
-        case 'ArrowLeft':
-          Matter.Body.setVelocity(head, { x: -5, y: 0 });
-          break;
-        case 'ArrowRight':
-          Matter.Body.setVelocity(head, { x: 5, y: 0 });
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+  // Use react-hotkeys-hook for handling keyboard input
+  useHotkeys('arrowup', () => {
+    if (snake.length > 0) {
+      Matter.Body.setVelocity(snake[0], { x: 0, y: -5 });
+    }
+  }, [snake]);
+  useHotkeys('arrowdown', () => {
+    if (snake.length > 0) {
+      Matter.Body.setVelocity(snake[0], { x: 0, y: 5 });
+    }
+  }, [snake]);
+  useHotkeys('arrowleft', () => {
+    if (snake.length > 0) {
+      Matter.Body.setVelocity(snake[0], { x: -5, y: 0 });
+    }
+  }, [snake]);
+  useHotkeys('arrowright', () => {
+    if (snake.length > 0) {
+      Matter.Body.setVelocity(snake[0], { x: 5, y: 0 });
+    }
   }, [snake]);
 
   useEffect(() => {
