@@ -90,7 +90,7 @@ Parts:
 - ~~React-Spring~~ this was used but replaced with matter.js
 - ~~React transition group~~ replaced with matter.js
 - Matter.js
-- useHotkeys: hook for handling movement controls, (not essential)
+- useHotkeys: hook for handling movement controls, (not essential, can manage with switch statement)
 -  zustand: handles react reducers to manage game state
 -  useSound: add audio fx
 
