@@ -106,6 +106,7 @@ Parts:
 I initially tried making the game using both matter.js and react-spring.  The game can work in react-spring but lacks the physics dynamic and seamless animation.
 
 Matter.js had an issue where the snake segments had their own physics and collision with the snake head, which caused erratic movement with more segments. UseState had to track the head and copy/spread the snake head so segments mirrored the head and did not move independently.
+Also had an issue implementing collision between snake head and body; since head is always touching body this constantly triggered game over for snake running into itself. Have to make collision detectors in snake separate and smaller - inside snake segments - same as I did with pocket detectors in 8 ball pool.
 
 1. <u>'useState':</u> useStates track the snake head, food, and matter.js engine;
 2. <u>'const initialSnake':</u> Creates the snake head;
