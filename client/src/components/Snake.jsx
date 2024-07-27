@@ -134,6 +134,7 @@ const SnakeGame = () => {
   useEffect(() => {
     if (!engine) return;
 
+    // collision between snake head and food:
     const checkCollision = () => {
       const head = snake[0];
       if (Matter.Query.collides(head, [food]).length > 0) {
@@ -166,6 +167,7 @@ const SnakeGame = () => {
   useEffect(() => {
     if (!engine) return;
 
+    // collision between snake head and wall:
     const checkWallCollision = () => {
       const head = snake[0];
       const boundaries = Matter.Composite.allBodies(engine.world).filter(body => body.isStatic);
@@ -189,7 +191,7 @@ const SnakeGame = () => {
   return (
     <div>
       {gameOver && <div className="game-over">Game Over</div>}
-      <canvas ref={canvasRef} width={800} height={600} />
+      <canvas ref={canvasRef} width={1000} height={800} />
     </div>
   );
 };
