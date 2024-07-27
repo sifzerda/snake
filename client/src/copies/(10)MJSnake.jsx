@@ -1,8 +1,10 @@
+// customize random food objects and colors
+
 import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { create } from 'zustand';
-// import useSound from 'use-sound';
+//import useSound from 'use-sound';
 
 // Creates Zustand store
 const useGameStore = create((set) => ({
@@ -14,14 +16,28 @@ const useGameStore = create((set) => ({
   setEngine: (engine) => set({ engine }),
 }));
 
+const emojis = [
+  { emoji: '🍇', color: '#6D6E00' },
+  { emoji: '🍉', color: '#F4A300' },
+  { emoji: '🍌', color: '#F2C700' },
+  { emoji: '🍍', color: '#F1C30F' },
+  { emoji: '🍑', color: '#F77F9C' },
+  { emoji: '🍒', color: '#E53935' },
+  { emoji: '🍓', color: '#D32F2F' },
+  { emoji: '🍄', color: '#9E9E9E' }
+];
+
+const getRandomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)];
+
 const SnakeGame = () => {
   const { snake, food, engine, setSnake, setFood, setEngine } = useGameStore();
   const segmentPositions = useRef([]);
   const canvasRef = useRef(null);
   const [gameOver, setGameOver] = useState(false);
+  const [foodEmoji, setFoodEmoji] = useState(getRandomEmoji());
 
-  // const [playCollisionSound] = useSound('/sounds/collision.mp3');
-  // const [playFoodSound] = useSound('/sounds/food.mp3');
+  //const [playCollisionSound] = useSound('/sounds/collision.mp3');
+  //const [playFoodSound] = useSound('/sounds/food.mp3');
 
   useEffect(() => {
     const newEngine = Matter.Engine.create();
@@ -52,7 +68,7 @@ const SnakeGame = () => {
 
     const initialSnake = [Matter.Bodies.rectangle(100, 100, 20, 20, {
       frictionAir: 0,
-      render: { fillStyle: '#00ff00' },
+      render: { fillStyle: 'green' },
     })];
 
     setSnake(initialSnake);
@@ -60,29 +76,10 @@ const SnakeGame = () => {
     segmentPositions.current = [{ x: 100, y: 100 }];
     Matter.World.add(world, initialSnake);
 
-    // Create canvas for food emoji
-    const emojiCanvas = document.createElement('canvas');
-    const emojiContext = emojiCanvas.getContext('2d');
-    emojiCanvas.width = 30; // Size of your emoji
-    emojiCanvas.height = 30;
-    emojiContext.font = '20px sans-serif'; // Font size should match the emoji size
-    emojiContext.fillText('🍏', 0, 20);
-
-// Apply red tint to emoji
-emojiContext.globalCompositeOperation = 'source-atop'; // Ensure tint only affects the emoji
-emojiContext.fillStyle = '#f02652';
-emojiContext.fillRect(0, 0, emojiCanvas.width, emojiCanvas.height);
-
     const foodObject = Matter.Bodies.circle(300, 300, 10, {
       isStatic: true,
       isSensor: true,
-      render: {
-        sprite: {
-          texture: emojiCanvas.toDataURL(),
-          xScale: 1.3, // Scale factor for width
-          yScale: 1.3, // Scale factor for height
-        },
-      },
+      render: { fillStyle: 'transparent' }, // Initially invisible
     });
 
     setFood(foodObject);
@@ -140,7 +137,6 @@ emojiContext.fillRect(0, 0, emojiCanvas.width, emojiCanvas.height);
         });
 
         segmentPositions.current = newSegmentPositions;
-        //console.log('Number of current snake segments:', snake.length);
       }
     };
 
@@ -154,40 +150,65 @@ emojiContext.fillRect(0, 0, emojiCanvas.width, emojiCanvas.height);
   useEffect(() => {
     if (!engine) return;
 
-    // Collision between snake head and food
-    const checkFoodCollision = () => {
+    const checkCollision = () => {
       const head = snake[0];
       if (Matter.Query.collides(head, [food]).length > 0) {
-        // playFoodSound();
+        //playFoodSound();
+        // Randomly select a new emoji
+        setFoodEmoji(getRandomEmoji());
+
+        // Move the food to a new position
         Matter.Body.setPosition(food, {
           x: Math.random() * 780 + 10,
           y: Math.random() * 580 + 10,
         });
 
+        // Calculate a new position for the new segment with a slight offset
+        const segmentSize = 20; // Width/height of the segment
+        const distance = segmentSize * 3; // Distance between segments, adjust as needed
+
+        // Determine the direction of the last segment to place the new segment farther away
         const lastSegmentPosition = segmentPositions.current[segmentPositions.current.length - 1];
-        const newSegment = Matter.Bodies.rectangle(lastSegmentPosition.x, lastSegmentPosition.y, 20, 20, {
+        const direction = {
+          x: Math.sign(lastSegmentPosition.x - snake[1]?.position.x) || 1,
+          y: Math.sign(lastSegmentPosition.y - snake[1]?.position.y) || 1,
+        };
+
+        // Calculate new position based on direction
+        const newSegmentPosition = {
+          x: lastSegmentPosition.x + distance * direction.x,
+          y: lastSegmentPosition.y + distance * direction.y,
+        };
+
+        // Create and position the new segment
+        const newSegment = Matter.Bodies.rectangle(newSegmentPosition.x, newSegmentPosition.y, segmentSize, segmentSize, {
           frictionAir: 0,
           isSensor: true,
-          render: { fillStyle: '#00ff00' },
+          render: { fillStyle: 'green' },
         });
 
-        setSnake([...snake, newSegment]);
-        segmentPositions.current.push({ ...lastSegmentPosition });
-        Matter.World.add(engine.world, newSegment);
+        // Check if the new segment position is not overlapping with existing ones
+        const isValidPosition = !snake.some(segment => Matter.Query.collides(newSegment, [segment]).length > 0);
+
+        if (isValidPosition) {
+          // Add the new segment
+          setSnake([...snake, newSegment]);
+          segmentPositions.current.push({ ...newSegmentPosition });
+          Matter.World.add(engine.world, newSegment);
+        }
       }
     };
 
-    Matter.Events.on(engine, 'beforeUpdate', checkFoodCollision);
+    Matter.Events.on(engine, 'beforeUpdate', checkCollision);
 
     return () => {
-      Matter.Events.off(engine, 'beforeUpdate', checkFoodCollision);
+      Matter.Events.off(engine, 'beforeUpdate', checkCollision);
     };
   }, [engine, snake, food, setSnake]);
 
   useEffect(() => {
     if (!engine) return;
 
-    // Collision between snake head and wall
     const checkWallCollision = () => {
       const head = snake[0];
       const boundaries = Matter.Composite.allBodies(engine.world).filter(body => body.isStatic);
@@ -195,7 +216,7 @@ emojiContext.fillRect(0, 0, emojiCanvas.width, emojiCanvas.height);
       for (const boundary of boundaries) {
         if (Matter.Query.collides(head, [boundary]).length > 0) {
           setGameOver(true);
-          // playCollisionSound();
+          //playCollisionSound();
           break;
         }
       }
@@ -208,33 +229,23 @@ emojiContext.fillRect(0, 0, emojiCanvas.width, emojiCanvas.height);
     };
   }, [engine, snake]);
 
-  useEffect(() => {
-    if (!engine) return;
-
-    // Collision between snake head and its segments
-    const checkSegmentCollision = () => {
-      const head = snake[0];
-      for (let i = 10; i < snake.length; i++) {
-        if (Matter.Query.collides(head, [snake[i]]).length > 0) {
-          setGameOver(true);
-          // playCollisionSound();
-          break;
-        }
-      }
-    };
-
-    Matter.Events.on(engine, 'beforeUpdate', checkSegmentCollision);
-
-    return () => {
-      Matter.Events.off(engine, 'beforeUpdate', checkSegmentCollision);
-    };
-  }, [engine, snake]);
-
-  // ---------------------------- rendering ---------------------------------//
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       {gameOver && <div className="game-over">Game Over</div>}
       <canvas ref={canvasRef} width={800} height={600} />
+      {/* Render food emoji with its color */}
+      <div
+        style={{
+          position: 'absolute',
+          top: food ? `${food.position.y}px` : 0,
+          left: food ? `${food.position.x}px` : 0,
+          fontSize: '20px', // Adjust size as needed
+          color: foodEmoji.color, // Set color based on emoji
+          pointerEvents: 'none', // Ensure it does not block canvas interactions
+        }}
+      >
+        {foodEmoji.emoji}
+      </div>
     </div>
   );
 };

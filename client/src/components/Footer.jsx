@@ -7,7 +7,7 @@ function Footer() {
       <div className="row d-flex justify-content-center">
         <div className="col-lg-8">
 
-          <p className="footer-text">sifzerda <span className='flag'>🍎</span> 2024</p>
+          <p className="footer-text">sifzerda <span className='flag'>🍏</span> 2024</p>
           <a href="https://github.com/sifzerda/snake" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={faGithub} size="2x" />
           </a>
