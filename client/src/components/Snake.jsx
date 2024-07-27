@@ -19,6 +19,7 @@ const SnakeGame = () => {
   const [gameOver, setGameOver] = useState(false);
   const [time, setTime] = useState(0); // Timer state
   const [timerStarted, setTimerStarted] = useState(false); // Timer start state
+  const [score, setScore] = useState(0); // Score state
 
   useEffect(() => {
     const newEngine = Matter.Engine.create();
@@ -122,7 +123,6 @@ const SnakeGame = () => {
       };
       Matter.Body.setVelocity(head, velocityMap[direction]);
 
-      // Start the timer on the first move
       if (!timerStarted) {
         setTimerStarted(true);
       }
@@ -181,6 +181,9 @@ const SnakeGame = () => {
         setSnake([...snake, newSegment]);
         segmentPositions.current.push({ ...lastSegmentPosition });
         Matter.World.add(engine.world, newSegment);
+
+        // Increase score
+        setScore((prevScore) => prevScore + 15);
       }
     };
 
@@ -237,6 +240,7 @@ const SnakeGame = () => {
     <div>
       {gameOver && <div className="game-over">Game Over</div>}
       <div className="timer">Time: {Math.floor(time / 60)}:{('0' + (time % 60)).slice(-2)}</div>
+      <div className="score">Score: {score}</div>
       <canvas ref={canvasRef} width={800} height={600} />
     </div>
   );
