@@ -188,6 +188,7 @@ const SnakeGame = () => {
     };
   }, [engine, snake]);
 
+  // ---------------------------- rendering ---------------------------------//
   return (
     <div>
       {gameOver && <div className="game-over">Game Over</div>}
