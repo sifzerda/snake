@@ -109,7 +109,6 @@ Also had an issue implementing collision between snake head and body; since head
 8. <u>'const useGameStore':</u> game state reducer managed by zustand.
 9. <u>'const boundaries':</u> creates insivible walls around game screen border.
 10. <u>'const checkFoodCollision', 'checkWallCollision', 'checkSegmentCollision':</u> handles collision between snake head and food objects, and between snake head and wall boundaries, and between snake head and new segments (excluding first 10 segments).
-11.  
 
 ## (7) Bugs: 
 
