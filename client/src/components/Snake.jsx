@@ -21,7 +21,7 @@ const SnakeGame = () => {
   const [timerStarted, setTimerStarted] = useState(false); // Timer start state
   const [score, setScore] = useState(0); // Score state
 
-  useEffect(() => {
+  const initializeGame = () => {
     const newEngine = Matter.Engine.create();
     const world = newEngine.world;
 
@@ -100,7 +100,17 @@ const SnakeGame = () => {
       Matter.Render.stop(render);
       Matter.Engine.clear(newEngine);
     };
-  }, [setSnake, setFood, setEngine, gameOver]);
+  };
+
+  useEffect(() => {
+    initializeGame();
+
+    return () => {
+      if (engine) {
+        Matter.Engine.clear(engine);
+      }
+    };
+  }, [gameOver]);
 
   useEffect(() => {
     if (gameOver || !timerStarted) return;
@@ -236,11 +246,30 @@ const SnakeGame = () => {
     };
   }, [engine, snake]);
 
+  useEffect(() => {
+    if (gameOver) {
+      snake.forEach(segment => {
+        segment.render.visible = false;
+      });
+    }
+  }, [gameOver, snake]);
+
+  const restartGame = () => {
+    setGameOver(false);
+    setTimerStarted(false);
+    setTime(0);
+    setScore(0);
+    setSnake([]);
+    setFood(null);
+    initializeGame();
+  };
+
   return (
     <div>
       {gameOver && <div className="game-over">Game Over</div>}
       <div className="timer">Time: {Math.floor(time / 60)}:{('0' + (time % 60)).slice(-2)}</div>
       <div className="score">Score: {score}</div>
+      <button onClick={restartGame}>New Game</button>
       <canvas ref={canvasRef} width={800} height={600} />
     </div>
   );
