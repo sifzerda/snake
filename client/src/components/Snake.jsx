@@ -7,6 +7,10 @@ import StartGame from './StartGame';
 import HighScores from './HighScores';
 import FinalScore from './FinalScore';
 
+import snakeHeadPx from '/images/snakeHead2.png';
+import snakeSegPx from '/images/snakeSeg.jpg';
+import snakeEndPx from '/images/snakeEnd.png';
+
 const useGameStore = create((set) => ({
   snake: [],
   food: null,
@@ -23,7 +27,7 @@ const SnakeGame = () => {
   const [time, setTime] = useState(0);
   const [timerStarted, setTimerStarted] = useState(false);
   const [score, setScore] = useState(0);
-
+  const [currentDirection, setCurrentDirection] = useState('right'); // New state for direction
   const [screen, setScreen] = useState('start');
   const [gameOver, setGameOver] = useState(false);
 
@@ -78,7 +82,14 @@ const SnakeGame = () => {
 
     const initialSnake = [Matter.Bodies.rectangle(100, 100, 20, 20, {
       frictionAir: 0,
-      render: { fillStyle: '#00ff00' },
+      render: //{ fillStyle: '#00ff00' },
+      {
+        sprite: {
+          texture: snakeHeadPx,
+          xScale: 0.9,
+          yScale: 0.9,
+      },
+    },
     })];
     
     setSnake(initialSnake);
@@ -141,6 +152,17 @@ const SnakeGame = () => {
       };
       Matter.Body.setVelocity(head, velocityMap[direction]);
 
+      // set the head's render.sprite angle based on movement direction
+      const angleMap = {
+        up: Math.PI,
+        down:  0,
+        left: Math.PI / 2,
+        right: -Math.PI / 2,
+      };
+      Matter.Body.setAngle(head, angleMap[direction]);
+
+      setCurrentDirection(direction); // Update the current direction
+
       if (!timerStarted) {
         setTimerStarted(true);
       }
@@ -164,6 +186,20 @@ const SnakeGame = () => {
           if (index > 0) {
             const newPosition = newSegmentPositions[index];
             Matter.Body.setPosition(segment, newPosition);
+
+            // Calculate angle based on position of next segment
+            const nextSegment = snake[index - 1];
+            const dx = nextSegment.position.x - segment.position.x;
+            const dy = nextSegment.position.y - segment.position.y;
+            const angle = Math.atan2(dy, dx);
+            Matter.Body.setAngle(segment, angle);
+
+            // Set sprite based on segment position
+            if (index === snake.length - 1) {
+              segment.render.sprite.texture = snakeEndPx;
+            } else {
+              segment.render.sprite.texture = snakeSegPx;
+            }
           }
         });
 
@@ -193,7 +229,15 @@ const SnakeGame = () => {
         const newSegment = Matter.Bodies.rectangle(lastSegmentPosition.x, lastSegmentPosition.y, 20, 20, {
           frictionAir: 0,
           isSensor: true,
-          render: { fillStyle: '#00ff00' },
+          render: //{ fillStyle: '#00ff00' },
+          {
+            sprite: {
+              texture: snakeSegPx,
+              xScale: 0.9,
+              yScale: 0.9,
+          },
+          },
+        
         });
 
         setSnake([...snake, newSegment]);
