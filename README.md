@@ -60,9 +60,9 @@ Lessons learned from building this project:
 
 ## (3) Visuals
 
-[Visit App deployed to Heroku](https://....com/)
+[Visit App deployed to Heroku](https://snake-10-afd58bdf61b8.herokuapp.com/)
 
-[INSERT SCREENSHOT HERE]
+![snakeShot1](https://github.com/user-attachments/assets/f0c48cd9-b96a-4cf2-91d9-5d531c1137a3)
 
 ## (4) Installation
 
