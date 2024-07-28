@@ -91,7 +91,7 @@ Parts:
 - Matter.js
 - useHotkeys: hook for handling movement controls, (not essential, can manage with switch statement)
 -  zustand: handles react reducers to manage game state
--  useSound: add audio fx
+-  ~~useSound: add audio fx~~ uncommented
 
 Early version of game made using react-spring, but this played out frame-by-frame and lacked the physics and animation dynamics. 
 
@@ -100,25 +100,26 @@ Matter.js had an issue where the snake segments had their own physics and collis
 Also had an issue implementing collision between snake head and body; since head is always touching body this constantly triggered game over for snake running into itself. I tried making tiny detection objects inside the head and segments but this created issues. Had to limit collision to head-to-segment, not segment-to-segment, and exclude the first 10 segments (since physically impossible for snake head to touch those anyway).
 
 1. <u>'useState':</u> useStates track the snake head, food, and matter.js engine;
-2. <u>'const initialSnake':</u> Creates the snake head;
+2. <u>'const head':</u> Creates the snake head;
 3. <u>'const foodObject':</u> creates static 'sensor' food objects;
 4. <u>'const handleKeyDown':</u> sets movement controls;
 5. <u>'const updateSegments'</u> adds segments to snake, spreading existing snake. Segment parts are copies of the head which mirror the head movement;
 6. <u>'const checkCollision':</u> handles collision between snake head and food objects; food is removed and reset to a random position, and a segment is added to the snake head;
 7. <u>'const newSegment':</u> segments are 'sensors' so they do not interfere with snake head physics.
 8. <u>'const useGameStore':</u> game state reducer managed by zustand.
-9. <u>'const boundaries':</u> creates insivible walls around game screen border.
-10. <u>'const checkFoodCollision', 'checkWallCollision', 'checkSegmentCollision':</u> handles collision between snake head and food objects, and between snake head and wall boundaries, and between snake head and new segments (excluding first 10 segments).
+9. <u>'const boundaries':</u> creates invisible walls around game screen border.
+10. <u>'const checkFoodCollision', 'checkWallCollision', 'checkSegmentCollision':</u> handles collision between snake head and food objects, and between snake head and wall boundaries, and between snake head and new segments (excluding first 10 segments);
+11. <u>'const emojiCanvas':</u> makes food object an apple emoji with styling;
+12. <u>'const handleDirection':</u> controls velocity per movement direction;
+13. <u>'const updateSegments':</u> adds and updates segments to snake body on eating.
 
 ### Alternate Config:
 
-Originally put in a 'restart game' button inside game. Putting in a FinalScore page made this redundant. It's there for a version of the game with no game over screen. It's saved inside /copies/(11)MJSnake.jsx
+Originally put in a 'restart game' button inside game. Putting in a FinalScore page made this redundant. It's there for a version of the game with no game over screen. Currently commented out and also saved inside /copies/(11)MJSnake.jsx.
 
 ## (7) Bugs: 
 
-- xxx
-- xxx
-- xxx
+- Sometimes after game over and visiting highscore page or submitting score, if you return to the main menu and click 'start game' it'll return you to the previous score submission page. Fixed by refreshing page or clicking one of the log in tabs and then returning to game tab.
 
 ## (8) To do: 
 
@@ -126,15 +127,15 @@ Originally put in a 'restart game' button inside game. Putting in a FinalScore p
 - [x] create food which randomly resets position once 'eaten'
 - [x] segments add to snake;
   - [x] segments added to snake don't interfere with movement physics;
-- [ ] add render.sprite to snake head, segments, and food
+- [x] add render.sprite to snake head, segments, and food
 - [ ] ~~difficulty ramp: snake moves faster as it gets longer~~
-- [ ] score with food eaten
-- [ ] timer for game session
-- [ ] highscores
-- [ ] main screen
-- [ ] submit score
-- [ ] exit game from game screen
-- [ ] profile highest scores display
+- [x] score with food eaten
+- [x] timer for game session
+- [x] highscores
+- [x] main screen
+- [x] submit score
+- [ ] ~~~~exit game from game screen~~
+- [x] profile highest scores display
 
 ## (10) Support
 

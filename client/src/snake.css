@@ -203,38 +203,15 @@ span.number {
 .profile-text {
   font-size: 1.2rem;
   margin: 10px 0;
-  color: black;
+  color: rgb(255, 255, 255);
+  background: black;
+  padding: 8px;
+  border-radius: 8px;
+ text-align: center;
+}
+ 
+.blue-background {
+  background-color: black;
+  border-radius: 8px;
 }
 
-
-/* snake game */
-
-.snake-enter {
-  opacity: 0;
-}
-.snake-enter-active {
-  opacity: 1;
-  transition: opacity 100ms;
-}
-.snake-exit {
-  opacity: 1;
-}
-.snake-exit-active {
-  opacity: 0;
-  transition: opacity 100ms;
-}
-
-.food-enter {
-  opacity: 0;
-}
-.food-enter-active {
-  opacity: 1;
-  transition: opacity 100ms;
-}
-.food-exit {
-  opacity: 1;
-}
-.food-exit-active {
-  opacity: 0;
-  transition: opacity 100ms;
-}
