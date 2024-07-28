@@ -20,17 +20,12 @@ const FinalScore = ({ score, time, onViewHighScores }) => {
   }, [error]);
 
   const userId = data?.me?._id;
-  const username = data?.me?.username || 'Anonymous';
+  //const username = data?.me?.username || 'Anonymous';
 
   const [saveSnakeScore] = useMutation(SAVE_SNAKE_SCORE);
 
   const handleSubmit = async () => {
-    console.log('Submitting score...');
-    console.log('User ID:', userId);
-    console.log('Snake Points:', snakePoints);
-    console.log('Snake Time Taken:', snakeTimeTaken);
 
-    try {
       const { data } = await saveSnakeScore({
         variables: {
           userId,
@@ -40,18 +35,6 @@ const FinalScore = ({ score, time, onViewHighScores }) => {
       });
       console.log('Mutation Response:', data);
       setShowSuccessMessage(true);
-    } catch (error) {
-      console.error('Error saving score:', error);
-      if (error.networkError) {
-        console.error('Network error details:', error.networkError);
-        alert('Network error occurred while saving your score. Please try again.');
-      } else if (error.graphQLErrors) {
-        console.error('GraphQL error details:', error.graphQLErrors);
-        alert('GraphQL error occurred while saving your score. Please check the logs for more details.');
-      } else {
-        alert('An unknown error occurred while saving your score.');
-      }
-    }
   };
 
   if (loading) {
@@ -61,8 +44,8 @@ const FinalScore = ({ score, time, onViewHighScores }) => {
   return (
     <div className="grid-container">
       <h1 className='start'>Game Over</h1>
-      <p className='black-text'>Your final score: {score}</p>
-      <p className='black-text'>Time taken: {time} seconds</p>
+      <p className='color-text'>Your final score: <span className='number'>{score}</span> points</p>
+      <p className='color-text'>Time lasted: <span className='number'>{time}</span> seconds</p>
 
       {showSuccessMessage ? (
         <p className="success">Your score has been submitted!</p>
@@ -72,7 +55,7 @@ const FinalScore = ({ score, time, onViewHighScores }) => {
             Submit Score
           </button>
         ) : (
-          <p className='black-text'>
+          <p className='color-text'>
             You must <Link to="/login">LOG IN</Link> or <Link to="/signup">SIGNUP</Link> to Submit a Score.
           </p>
         )
@@ -82,7 +65,7 @@ const FinalScore = ({ score, time, onViewHighScores }) => {
         High Scores
       </button>
 
-      <button className="submit-button-y" onClick={() => window.location.reload()}>
+      <button className="submit-button-m" onClick={() => window.location.reload()}>
         Back to Menu
       </button>
     </div>

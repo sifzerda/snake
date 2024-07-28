@@ -414,8 +414,8 @@ const SnakeGame = () => {
   return (
     <div>
       {gameOver && <div className="game-over">Game Over</div>}
-      <div className="timer">Time: {Math.floor(time / 60)}:{('0' + (time % 60)).slice(-2)}</div>
-      <div className="score">Score: {score}</div>
+      <div className="timer">Time: <span className='number'> {Math.floor(time / 60)}:{('0' + (time % 60)).slice(-2)}</span></div>
+      <div className="score">Score: <span className='number'>{score}</span></div>
 
   {/*  --------------------------------------   restart button inside game
       <button onClick={restartGame}>New Game</button>

@@ -64,7 +64,7 @@ function Login() {
           </div>
         )}
         <div className="button-container-z">
-          <button type="submit" className="submit-button-z">Submit</button>
+          <button type="submit" className="submit-button-m">Submit</button>
         </div>
       </form>
     </div>

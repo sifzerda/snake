@@ -10,6 +10,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poiret+One&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Raleway+Dots&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 :root {
   --blue: #2684ff;
@@ -28,7 +30,7 @@
   --creepy-green: #9cffd9;
   --creepy-green2:  #cefff4;
   --midnight: rgb(8, 29, 88);
-  --reptile: #00ff00;
+  --reptile: #68ff68;
 }
 
 * {

@@ -58,7 +58,7 @@ return (
           ))}
         </tbody>
       </table>
-      <button onClick={onBackToMenu}>Back to Menu</button>
+      <button className='submit-button-m' onClick={onBackToMenu}>Back to Menu</button>
       {/*---    <button className="submit-button-m" onClick={() => window.location.reload()}>Back to Game</button>    --*/}
     </div>
   );
