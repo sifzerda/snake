@@ -33,32 +33,17 @@ export const REMOVE_USER = gql`
   }
 `;
 
-export const MUTATION_SEND_MESSAGE = gql`
-  mutation sendMessage($senderId: ID!, $message: String!) {
-    sendMessage(senderId: $senderId, message: $message) {
-      _id
-      sender {
-        _id
-        username
-      }
-
-      message
-      timestamp
+export const SAVE_SNAKE_SCORE = gql`
+mutation saveSnakeScore($userId: ID!, $snakePoints: Int!) {
+  saveSnakeScore(userId: $userId, snakePoints: $snakePoints) {
+    _id
+    username
+    email
+    snakeScore {
+      snakePoints
     }
   }
+}
 `;
 
-export const MUTATION_SAVE_CONVERSATION = gql`
-  mutation saveConversation($messages: [MessageInput!]!) {
-    saveConversation(messages: $messages) {
-      _id
-      sender {
-        _id
-        username
-      }
-
-      message
-      timestamp
-    }
-  }
-`;
+ 

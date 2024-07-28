@@ -3,30 +3,30 @@ import { Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import Auth from '../utils/auth';
 import { QUERY_ME } from '../utils/queries';
-import { SAVE_MINE_SCORE } from '../utils/mutations'
+import { SAVE_SNAKE_SCORE } from '../utils/mutations'
 import '../App.css';
 
-const FinalScore = ({ score, time, onHighScores }) => {
-    const [minePoints, setMinePoints] = useState(score);
-    const [mineTimeTaken, setMineTimeTaken] = useState(time);
+const FinalScore = ({ score, time, onViewHighScores }) => {
+    const [snakePoints, setSnakePoints] = useState(score);
+    const [snakeTimeTaken, setSnakeTimeTaken] = useState(time);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
   
     const { data } = useQuery(QUERY_ME);
     const userId = data?.me?._id;
     const username = data?.me?.username || 'Anonymous';
   
-    const [saveMineScore] = useMutation(SAVE_MINE_SCORE);
+    const [saveSnakeScore] = useMutation(SAVE_SNAKE_SCORE);
   
     const handleSubmit = async () => {
       try {
-        const { data } = await saveMineScore({
+        const { data } = await saveSnakeScore({
           variables: {
             userId,
-            minePoints,
-            mineTimeTaken,
+            snakePoints,
+            snakeTimeTaken,
           },
         });
-        console.log('Score saved:', data.saveMineScore);
+        console.log('Score saved:', data.saveSnakeScore);
         // Optionally, you can trigger some UI update or action upon successful save
         setShowSuccessMessage(true); // Show success message
       } catch (error) {
@@ -57,13 +57,14 @@ const FinalScore = ({ score, time, onHighScores }) => {
             )
           )}
     
-          <button className="submit-button-m" onClick={onHighScores}>
+          <button className="submit-button-m" onClick={onViewHighScores}>
             High Scores
           </button>
-    
-          <button className="submit-button-m" onClick={() => window.location.reload()}>
-            Play Again
+
+          <button className="submit-button-y" onClick={() => window.location.reload()}>
+            Back to Menu
           </button>
+
         </div>
       );
     };

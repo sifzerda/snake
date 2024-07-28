@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { create } from 'zustand';
-import StartGame from '../components/StartGame';
-import HighScores from '../components/HighScores';
+
+import StartGame from './StartGame';
+import HighScores from './HighScores';
+import FinalScore from './FinalScore';
 
 const useGameStore = create((set) => ({
   snake: [],
@@ -18,11 +20,34 @@ const SnakeGame = () => {
   const { snake, food, engine, setSnake, setFood, setEngine } = useGameStore();
   const segmentPositions = useRef([]);
   const canvasRef = useRef(null);
-  const [screen, setScreen] = useState('start'); // Manage current screen
+  const [time, setTime] = useState(0);
+  const [timerStarted, setTimerStarted] = useState(false);
+  const [score, setScore] = useState(0);
+
+  const [screen, setScreen] = useState('start');
   const [gameOver, setGameOver] = useState(false);
-  const [time, setTime] = useState(0); // Timer state
-  const [timerStarted, setTimerStarted] = useState(false); // Timer start state
-  const [score, setScore] = useState(0); // Score state
+
+  useEffect(() => {
+    if (screen === 'game' && canvasRef.current) {
+      initializeGame();
+    }
+
+    return () => {
+      if (engine) {
+        Matter.Engine.clear(engine);
+      }
+    };
+  }, [screen, canvasRef.current]);
+
+  useEffect(() => {
+    if (gameOver || !timerStarted) return;
+
+    const timerInterval = setInterval(() => {
+      setTime((prevTime) => prevTime + 1);
+    }, 1000);
+
+    return () => clearInterval(timerInterval);
+  }, [gameOver, timerStarted]);
 
   const initializeGame = () => {
     const newEngine = Matter.Engine.create();
@@ -105,28 +130,6 @@ const SnakeGame = () => {
     };
   };
 
-  useEffect(() => {
-    if (screen === 'game') {
-      initializeGame();
-    }
-
-    return () => {
-      if (engine) {
-        Matter.Engine.clear(engine);
-      }
-    };
-  }, [gameOver]);
-
-  useEffect(() => {
-    if (gameOver || !timerStarted) return;
-
-    const timerInterval = setInterval(() => {
-      setTime((prevTime) => prevTime + 1);
-    }, 1000);
-
-    return () => clearInterval(timerInterval);
-  }, [gameOver, timerStarted]);
-
   const handleDirection = (direction) => {
     if (snake.length > 0) {
       const head = snake[0];
@@ -180,7 +183,7 @@ const SnakeGame = () => {
 
     const checkFoodCollision = () => {
       const head = snake[0];
-      if (Matter.Query.collides(head, [food]).length > 0) {
+      if (food && Matter.Query.collides(head, [food]).length > 0) {
         Matter.Body.setPosition(food, {
           x: Math.random() * 780 + 10,
           y: Math.random() * 580 + 10,
@@ -266,7 +269,7 @@ const SnakeGame = () => {
     setScore(0);
     setSnake([]);
     setFood(null);
-    initializeGame();
+    setScreen('game');
   };
 
   if (screen === 'start') {
@@ -280,18 +283,36 @@ const SnakeGame = () => {
 
   if (screen === 'highScores') {
     return (
-      <HighScores
+      <HighScores 
+      onBackToMenu={() => setScreen('start')}
+      onBack={() => setScreen('start')} />
+    );
+  }
+
+  if (gameOver) {
+    return (
+      <FinalScore 
+        score={score}
+        time={time}
+        onRestart={restartGame}
         onBackToMenu={() => setScreen('start')}
+        onViewHighScores={() => setScreen('highScores')}
       />
     );
   }
+
+  // ---------------------------- rendering ---------------------------------//
 
   return (
     <div>
       {gameOver && <div className="game-over">Game Over</div>}
       <div className="timer">Time: {Math.floor(time / 60)}:{('0' + (time % 60)).slice(-2)}</div>
       <div className="score">Score: {score}</div>
+
+  {/*  --------------------------------------   restart button inside game
       <button onClick={restartGame}>New Game</button>
+  ------------------------------------------*/}
+
       <canvas ref={canvasRef} width={800} height={600} />
     </div>
   );

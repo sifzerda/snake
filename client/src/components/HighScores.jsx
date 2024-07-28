@@ -2,7 +2,7 @@ import '../App.css'; // Assuming App.css is your stylesheet for styling
 import { useQuery } from '@apollo/client';
 import { QUERY_USERS } from '../utils/queries';
 
-const HighScores = () => {
+const HighScores = ({ onBackToMenu }) => {
   const { loading, data, error } = useQuery(QUERY_USERS);
 
   if (loading) return <p>Loading...</p>;
@@ -58,7 +58,8 @@ return (
           ))}
         </tbody>
       </table>
-      <button className="submit-button-m" onClick={() => window.location.reload()}>Back to Game</button>
+      <button onClick={onBackToMenu}>Back to Menu</button>
+      {/*---    <button className="submit-button-m" onClick={() => window.location.reload()}>Back to Game</button>    --*/}
     </div>
   );
 };
