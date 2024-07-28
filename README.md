@@ -136,6 +136,7 @@ Originally put in a 'restart game' button inside game. Putting in a FinalScore p
 - [x] submit score
 - [ ] ~~~~exit game from game screen~~
 - [x] profile highest scores display
+- [ ] make window/device responsive
 
 ## (10) Support
 
