@@ -57,10 +57,10 @@ const SnakeGame = () => {
   const initializeGame = () => {
     const newEngine = Matter.Engine.create();
     const world = newEngine.world;
-
+  
     newEngine.gravity.y = 0;
     newEngine.gravity.x = 0;
-
+  
     const canvas = canvasRef.current;
     const render = Matter.Render.create({
       canvas: canvas,
@@ -71,29 +71,31 @@ const SnakeGame = () => {
         wireframes: false,
       },
     });
-
+  
     const boundaries = [
       Matter.Bodies.rectangle(canvas.width / 2, 0, canvas.width, 20, { isStatic: true }),
       Matter.Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 20, { isStatic: true }),
       Matter.Bodies.rectangle(0, canvas.height / 2, 20, canvas.height, { isStatic: true }),
       Matter.Bodies.rectangle(canvas.width, canvas.height / 2, 20, canvas.height, { isStatic: true }),
     ];
-
+  
     Matter.World.add(world, boundaries);
-
-    const initialSnake = [Matter.Bodies.rectangle(100, 100, 20, 20, {
+  
+    const head = Matter.Bodies.rectangle(100, 100, 20, 20, {
       frictionAir: 0,
       render: {
         sprite: {
           texture: snakeHeadPx,
           xScale: 0.9,
           yScale: 0.9,
+          zIndex: 2, // Ensure head is above segments
         },
       },
-    })];
-    
+    });
+  
+    const initialSnake = [head];
     setSnake(initialSnake);
-
+  
     segmentPositions.current = [{ x: 100, y: 100 }];
     Matter.World.add(world, initialSnake);
 
@@ -181,40 +183,46 @@ const SnakeGame = () => {
       if (snake.length > 1) {
         const headPosition = { ...snake[0].position };
         const newSegmentPositions = [headPosition, ...segmentPositions.current.slice(0, snake.length - 1)];
-
+    
+        // Update all segments
         snake.forEach((segment, index) => {
           if (index > 0) {
             const newPosition = newSegmentPositions[index];
             Matter.Body.setPosition(segment, newPosition);
-
+    
             // Calculate angle based on position of next segment
             const nextSegment = snake[index - 1];
             const dx = nextSegment.position.x - segment.position.x;
             const dy = nextSegment.position.y - segment.position.y;
             const angle = Math.atan2(dy, dx);
             Matter.Body.setAngle(segment, angle);
-
- // Set sprite based on segment position
-          if (index === snake.length - 1) {
-            segment.render.sprite.texture = snakeEndPx;
-          } else {
-            // Check if the segment is turning
-            const prevSegment = snake[index + 1];
-            if (prevSegment) {
-              const prevDx = prevSegment.position.x - segment.position.x;
-              const prevDy = prevSegment.position.y - segment.position.y;
-              const isTurning = Math.abs(prevDx - dx) > 1 || Math.abs(prevDy - dy) > 1;
-              segment.render.sprite.texture = isTurning ? snakeBendPx : snakeSegPx;
+    
+            // Update sprite texture based on position
+            if (index === snake.length - 1) {
+              segment.render.sprite.texture = snakeEndPx;
             } else {
-              segment.render.sprite.texture = snakeSegPx;
+              const prevSegment = snake[index + 1];
+              if (prevSegment) {
+                const prevDx = prevSegment.position.x - segment.position.x;
+                const prevDy = prevSegment.position.y - segment.position.y;
+                const isTurning = Math.abs(prevDx - dx) > 1 || Math.abs(prevDy - dy) > 1;
+                segment.render.sprite.texture = isTurning ? snakeBendPx : snakeSegPx;
+              } else {
+                segment.render.sprite.texture = snakeSegPx;
+              }
             }
           }
-        }
-      });
-  
-      segmentPositions.current = newSegmentPositions;
-    }
-  };
+        });
+    
+        segmentPositions.current = newSegmentPositions;
+    
+        // Ensure the head is always rendered above other segments
+        const head = snake[0];
+        const segments = snake.slice(1);
+        Matter.World.remove(engine.world, [head]); // Remove head
+        Matter.World.add(engine.world, [head]);   // Add head last
+      }
+    };
 
     Matter.Events.on(engine, 'beforeUpdate', updateSegments);
 
