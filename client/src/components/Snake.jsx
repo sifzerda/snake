@@ -10,6 +10,7 @@ import FinalScore from './FinalScore';
 import snakeHeadPx from '/images/snakeHead2.png';
 import snakeSegPx from '/images/snakeSeg.jpg';
 import snakeEndPx from '/images/snakeEnd.png';
+import snakeBendPx from '/images/snakeBend.png';
 
 const useGameStore = create((set) => ({
   snake: [],
@@ -82,14 +83,13 @@ const SnakeGame = () => {
 
     const initialSnake = [Matter.Bodies.rectangle(100, 100, 20, 20, {
       frictionAir: 0,
-      render: //{ fillStyle: '#00ff00' },
-      {
+      render: {
         sprite: {
           texture: snakeHeadPx,
           xScale: 0.9,
           yScale: 0.9,
+        },
       },
-    },
     })];
     
     setSnake(initialSnake);
@@ -194,18 +194,27 @@ const SnakeGame = () => {
             const angle = Math.atan2(dy, dx);
             Matter.Body.setAngle(segment, angle);
 
-            // Set sprite based on segment position
-            if (index === snake.length - 1) {
-              segment.render.sprite.texture = snakeEndPx;
+ // Set sprite based on segment position
+          if (index === snake.length - 1) {
+            segment.render.sprite.texture = snakeEndPx;
+          } else {
+            // Check if the segment is turning
+            const prevSegment = snake[index + 1];
+            if (prevSegment) {
+              const prevDx = prevSegment.position.x - segment.position.x;
+              const prevDy = prevSegment.position.y - segment.position.y;
+              const isTurning = Math.abs(prevDx - dx) > 1 || Math.abs(prevDy - dy) > 1;
+              segment.render.sprite.texture = isTurning ? snakeBendPx : snakeSegPx;
             } else {
               segment.render.sprite.texture = snakeSegPx;
             }
           }
-        });
-
-        segmentPositions.current = newSegmentPositions;
-      }
-    };
+        }
+      });
+  
+      segmentPositions.current = newSegmentPositions;
+    }
+  };
 
     Matter.Events.on(engine, 'beforeUpdate', updateSegments);
 
