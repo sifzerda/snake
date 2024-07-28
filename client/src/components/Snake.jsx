@@ -7,10 +7,10 @@ import StartGame from './StartGame';
 import HighScores from './HighScores';
 import FinalScore from './FinalScore';
 
-import snakeHeadPx from '/images/snakeHead2.png';
+import snakeHeadPx from '/images/snakeHead.png';
 import snakeSegPx from '/images/snakeSeg.jpg';
-import snakeEndPx from '/images/snakeEnd.png';
-import snakeBendPx from '/images/snakeBend.png';
+import snakeEndPx from '/images/snakeEnd.jpg';
+import snakeBendPx from '/images/snakeBend.jpg';
 
 const useGameStore = create((set) => ({
   snake: [],
@@ -88,7 +88,6 @@ const SnakeGame = () => {
           texture: snakeHeadPx,
           xScale: 0.9,
           yScale: 0.9,
-          zIndex: 2, // Ensure head is above segments
         },
       },
     });
