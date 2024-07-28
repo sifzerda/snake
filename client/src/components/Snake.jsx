@@ -80,29 +80,29 @@ const SnakeGame = () => {
       Matter.Bodies.rectangle(canvas.width / 2, 0, canvas.width, 20, {
         isStatic: true,
         render: {
-          strokeStyle: strokeColor, // Apply the color
-          strokeWidth: 2, // Apply the width
+          strokeStyle: strokeColor, // color
+          strokeWidth: 2, // width
         },
       }),
       Matter.Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 20, {
         isStatic: true,
         render: {
-          strokeStyle: strokeColor, // Apply the color
-          strokeWidth: 2, // Apply the width
+          strokeStyle: strokeColor, // color
+          strokeWidth: 2, // width
         },
       }),
       Matter.Bodies.rectangle(0, canvas.height / 2, 20, canvas.height, {
         isStatic: true,
         render: {
-          strokeStyle: strokeColor, // Apply the color
-          strokeWidth: 2, // Apply the width
+          strokeStyle: strokeColor, // color
+          strokeWidth: 2, // width
         },
       }),
       Matter.Bodies.rectangle(canvas.width, canvas.height / 2, 20, canvas.height, {
         isStatic: true,
         render: {
-          strokeStyle: strokeColor, // Apply the color
-          strokeWidth: 2, // Apply the width
+          strokeStyle: strokeColor, // color
+          strokeWidth: 2, // width
         },
       }),
     ];
