@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { create } from 'zustand';
+import StartGame from '../components/StartGame';
+import HighScores from '../components/HighScores';
 
 const useGameStore = create((set) => ({
   snake: [],
@@ -16,6 +18,7 @@ const SnakeGame = () => {
   const { snake, food, engine, setSnake, setFood, setEngine } = useGameStore();
   const segmentPositions = useRef([]);
   const canvasRef = useRef(null);
+  const [screen, setScreen] = useState('start'); // Manage current screen
   const [gameOver, setGameOver] = useState(false);
   const [time, setTime] = useState(0); // Timer state
   const [timerStarted, setTimerStarted] = useState(false); // Timer start state
@@ -103,7 +106,9 @@ const SnakeGame = () => {
   };
 
   useEffect(() => {
-    initializeGame();
+    if (screen === 'game') {
+      initializeGame();
+    }
 
     return () => {
       if (engine) {
@@ -263,6 +268,23 @@ const SnakeGame = () => {
     setFood(null);
     initializeGame();
   };
+
+  if (screen === 'start') {
+    return (
+      <StartGame
+        onStartGame={() => setScreen('game')}
+        onViewHighScores={() => setScreen('highScores')}
+      />
+    );
+  }
+
+  if (screen === 'highScores') {
+    return (
+      <HighScores
+        onBackToMenu={() => setScreen('start')}
+      />
+    );
+  }
 
   return (
     <div>

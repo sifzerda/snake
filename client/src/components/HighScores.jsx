@@ -10,25 +10,25 @@ const HighScores = () => {
 
   const users = data.users; // Extracting users from query data
 
-  // Aggregate all mineScore entries with associated usernames
+  // Aggregate all snakeScore entries with associated usernames
   let allScores = [];
   users.forEach(user => {
-    user.mineScore.forEach(score => {
+    user.snakeScore.forEach(score => {
       allScores.push({
         username: user.username,
-        minePoints: score.minePoints,
-        mineTimeTaken: score.mineTimeTaken,
+        snakePoints: score.snakePoints,
+        snakeTimeTaken: score.snakeTimeTaken,
       });
     });
   });
 
-  // Sort combined scores by minePoints in descending order
-  // If points are the same, then sort by mineTimeTaken in ascending order
+  // Sort combined scores by snakePoints in descending order
+  // If points are the same, then sort by snakeTimeTaken in ascending order
   allScores.sort((a, b) => {
-    if (b.minePoints !== a.minePoints) {
-      return b.minePoints - a.minePoints; // Sort by points descending
+    if (b.snakePoints !== a.snakePoints) {
+      return b.snakePoints - a.snakePoints; // Sort by points descending
     } else {
-      return a.mineTimeTaken - b.mineTimeTaken; // Sort by time ascending if points are tied
+      return a.snakeTimeTaken - b.snakeTimeTaken; // Sort by time ascending if points are tied
     }
 });
 
@@ -51,8 +51,8 @@ return (
           {top20Scores.map((score, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
-              <td>{score.minePoints}</td>
-              <td>{score.mineTimeTaken}</td>
+              <td>{score.snakePoints}</td>
+              <td>{score.snakeTimeTaken}</td>
               <td>{score.username}</td>
             </tr>
           ))}
