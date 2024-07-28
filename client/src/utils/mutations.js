@@ -34,16 +34,17 @@ export const REMOVE_USER = gql`
 `;
 
 export const SAVE_SNAKE_SCORE = gql`
-mutation saveSnakeScore($userId: ID!, $snakePoints: Int!) {
-  saveSnakeScore(userId: $userId, snakePoints: $snakePoints) {
-    _id
-    username
-    email
-    snakeScore {
-      snakePoints
+  mutation saveSnakeScore($userId: ID!, $snakePoints: Int!, $snakeTimeTaken: Int!) {
+    saveSnakeScore(userId: $userId, snakePoints: $snakePoints, snakeTimeTaken: $snakeTimeTaken) {
+      _id
+      username
+      email
+      snakeScore {
+        snakePoints
+        snakeTimeTaken
+      }
     }
   }
-}
 `;
-
+ 
  

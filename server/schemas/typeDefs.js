@@ -1,5 +1,4 @@
 const typeDefs = `
-
   type User {
     _id: ID
     username: String
@@ -27,11 +26,11 @@ const typeDefs = `
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
-    updateUser(username: String, email: String, password: String): User
+    updateUser(username: String, email: String, password: String, snakePoints: Int, snakeTime: Int): User
     login(email: String!, password: String!): Auth
     removeUser: User
     saveSnakeScore(userId: ID!, snakePoints: Int!, snakeTimeTaken: Int!): User
-    }
+  }
 `;
 
 module.exports = typeDefs;

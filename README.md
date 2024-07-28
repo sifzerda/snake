@@ -110,6 +110,10 @@ Also had an issue implementing collision between snake head and body; since head
 9. <u>'const boundaries':</u> creates insivible walls around game screen border.
 10. <u>'const checkFoodCollision', 'checkWallCollision', 'checkSegmentCollision':</u> handles collision between snake head and food objects, and between snake head and wall boundaries, and between snake head and new segments (excluding first 10 segments).
 
+### Alternate Config:
+
+Originally put in a 'restart game' button inside game. Putting in a FinalScore page made this redundant. It's there for a version of the game with no game over screen. It's saved inside /copies/(11)MJSnake.jsx
+
 ## (7) Bugs: 
 
 - xxx

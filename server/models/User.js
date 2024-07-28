@@ -20,6 +20,7 @@ const userSchema = new Schema({
     required: true,
     minlength: 5
   },
+
   snakeScore: [
     {
       snakePoints: {
@@ -30,9 +31,8 @@ const userSchema = new Schema({
         type: Number,
         required: true,
       },
-    },
+    }
   ],
-
 });
 
 // set up pre-save middleware to create password
