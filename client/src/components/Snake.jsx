@@ -72,14 +72,44 @@ const SnakeGame = () => {
       },
     });
   
+// ----------------------------  BOUNDARIES ----------------------------------------------------------//
+
+    const strokeColor = '#00fff0'; // Set the color for all strokes
+  
     const boundaries = [
-      Matter.Bodies.rectangle(canvas.width / 2, 0, canvas.width, 20, { isStatic: true }),
-      Matter.Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 20, { isStatic: true }),
-      Matter.Bodies.rectangle(0, canvas.height / 2, 20, canvas.height, { isStatic: true }),
-      Matter.Bodies.rectangle(canvas.width, canvas.height / 2, 20, canvas.height, { isStatic: true }),
+      Matter.Bodies.rectangle(canvas.width / 2, 0, canvas.width, 20, {
+        isStatic: true,
+        render: {
+          strokeStyle: strokeColor, // Apply the color
+          strokeWidth: 2, // Apply the width
+        },
+      }),
+      Matter.Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 20, {
+        isStatic: true,
+        render: {
+          strokeStyle: strokeColor, // Apply the color
+          strokeWidth: 2, // Apply the width
+        },
+      }),
+      Matter.Bodies.rectangle(0, canvas.height / 2, 20, canvas.height, {
+        isStatic: true,
+        render: {
+          strokeStyle: strokeColor, // Apply the color
+          strokeWidth: 2, // Apply the width
+        },
+      }),
+      Matter.Bodies.rectangle(canvas.width, canvas.height / 2, 20, canvas.height, {
+        isStatic: true,
+        render: {
+          strokeStyle: strokeColor, // Apply the color
+          strokeWidth: 2, // Apply the width
+        },
+      }),
     ];
   
     Matter.World.add(world, boundaries);
+
+// ----------------------------  SNAKE HEAD ----------------------------------------------------------//
   
     const head = Matter.Bodies.rectangle(100, 100, 20, 20, {
       frictionAir: 0,
@@ -97,6 +127,8 @@ const SnakeGame = () => {
   
     segmentPositions.current = [{ x: 100, y: 100 }];
     Matter.World.add(world, initialSnake);
+
+    // ----------------------------  FOOD ----------------------------------------------------------//
 
     const emojiCanvas = document.createElement('canvas');
     const emojiContext = emojiCanvas.getContext('2d');
@@ -124,6 +156,8 @@ const SnakeGame = () => {
     setFood(foodObject);
     Matter.World.add(world, foodObject);
 
+    // ----------------------------  ENGINE RENDERING -----------------------------------------------//
+
     const update = () => {
       if (!gameOver) {
         Matter.Engine.update(newEngine, 1000 / 60);
@@ -141,6 +175,8 @@ const SnakeGame = () => {
       Matter.Engine.clear(newEngine);
     };
   };
+
+  // ----------------------------  DIRECTION HANDLING --------------------------------------------//
 
   const handleDirection = (direction) => {
     if (snake.length > 0) {
@@ -174,6 +210,8 @@ const SnakeGame = () => {
   useHotkeys('arrowdown', () => handleDirection('down'), [snake]);
   useHotkeys('arrowleft', () => handleDirection('left'), [snake]);
   useHotkeys('arrowright', () => handleDirection('right'), [snake]);
+
+// ----------------------------  SNAKE GROWTH -----------------------------------------------//
 
   useEffect(() => {
     if (!engine) return;
@@ -230,9 +268,11 @@ const SnakeGame = () => {
     };
   }, [engine, snake]);
 
+  // ----------------------------  COLLISION DETECTION (CD) -----------------------------------------------//
+
   useEffect(() => {
     if (!engine) return;
-
+// ----------------------------- CD: snake head x food -------------------------------------------------//
     const checkFoodCollision = () => {
       const head = snake[0];
       if (food && Matter.Query.collides(head, [food]).length > 0) {
@@ -240,7 +280,7 @@ const SnakeGame = () => {
           x: Math.random() * 780 + 10,
           y: Math.random() * 580 + 10,
         });
-
+// ------------------------------------ SNAKE TAIL -------------------------------------------//
         const lastSegmentPosition = segmentPositions.current[segmentPositions.current.length - 1];
         const newSegment = Matter.Bodies.rectangle(lastSegmentPosition.x, lastSegmentPosition.y, 20, 20, {
           frictionAir: 0,
@@ -272,6 +312,8 @@ const SnakeGame = () => {
     };
   }, [engine, snake, food, setSnake]);
 
+// ----------------------------- CD: snake head x walls -------------------------------------------------//
+
   useEffect(() => {
     if (!engine) return;
 
@@ -294,6 +336,8 @@ const SnakeGame = () => {
     };
   }, [engine, snake]);
 
+// ----------------------------- CD: snake head x snake segments -------------------------------------------------//
+
   useEffect(() => {
     if (!engine) return;
 
@@ -314,6 +358,8 @@ const SnakeGame = () => {
     };
   }, [engine, snake]);
 
+// ----------------------------- GAME OVER -------------------------------------------------//
+
   useEffect(() => {
     if (gameOver) {
       snake.forEach(segment => {
@@ -331,6 +377,8 @@ const SnakeGame = () => {
     setFood(null);
     setScreen('game');
   };
+
+  // ----------------------------- SCREEN HANDLING -------------------------------------------------//
 
   if (screen === 'start') {
     return (
