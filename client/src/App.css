@@ -56,7 +56,7 @@ body {
   align-items: center;
   text-align: center;
   overflow: hidden;
-  padding-top: 20px;
+  padding-top: 2px;
   text-align: center;
 }
 
@@ -72,15 +72,8 @@ li {
 
 /* Additional styling */
 
-.px-5 {
-  padding-right: 3rem !important;
-  padding-left: 3rem !important;
-  padding-bottom: 3rem !important;
-}
-
 .justify-content-center {
   justify-content: center !important;
-  padding-top: 40px;
 }
 
 p.lead.my-3 {
@@ -201,7 +194,7 @@ h2.login-title {
   color: var(--reptile);
 }
 
-div.container.my-1-9 {
+.container.my-1-9 {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
@@ -228,7 +221,6 @@ div.container.my-1-9 {
 
 .main-content {
   flex: 1;
-  padding: 20px;
 }
 
 *,
@@ -244,7 +236,7 @@ footer {
   border-top: var(--midnight) dashed 4px;
   margin-top: auto;
   background: black;
-  padding: 16px;
+  padding: 15px;
   width: 100%;
 }
 
@@ -339,7 +331,6 @@ h5 {
 /* content ------------------------------------------------*/
 
 .jumbotron {
-  padding: 2rem;
   margin: 0 auto;
   border: 1px solid #ffffff;
   background-color: black!important;
