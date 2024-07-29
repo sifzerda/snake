@@ -32,25 +32,36 @@
   }
   
   .white-box {
-    display: grid;
-    place-items: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: rgb(0, 0, 0);
     padding: 20px;
-    padding-left: 40px;
     border-radius: 10px;
     border: 8px solid var(--midnight);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: fit-content; 
-    height: fit-content;
+    width: 100%; /* Use a percentage width to allow resizing */
+    max-width: 950px; /* Set a maximum width to limit the box size */
+    height: auto; /* Adjust height to content */
+    margin: 0 auto; /* Center the box horizontally */
   }
   
-  .grid-container {
-    margin-top: 20px; 
-    display: grid;
-    min-width: 900px;
-    place-items: center; 
-    
-  }
+.grid-container {
+  margin-top: 20px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 950px;
+  padding: 15px;
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}
   
 .submit-button-m {
   display: block;
@@ -215,3 +226,17 @@ span.number {
   border-radius: 8px;
 }
 
+/* Responsive adjustments for smaller screens */
+@media screen and (max-width: 900px) {
+  .white-box {
+    padding: 15px;
+    border-width: 6px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .white-box {
+    padding: 10px;
+    border-width: 4px;
+  }
+}
